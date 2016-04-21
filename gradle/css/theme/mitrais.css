@@ -19,7 +19,7 @@ section.has-light-background, section.has-light-background h1, section.has-light
 
 .main .reveal {
   font-family: "Source Sans Pro", Helvetica, sans-serif;
-  font-size: 38px;
+  font-size: 30px;
   font-weight: normal;
   color: #fff; }
 
@@ -67,7 +67,7 @@ body {
 
 .reveal {
   font-family: "Source Sans Pro", Helvetica, sans-serif;
-  font-size: 38px;
+  font-size: 30px;
   font-weight: normal;
   color: #6200C0; }
 
@@ -341,3 +341,5 @@ body {
   max-height: 500px; }
 .reveal .slides {
   text-align: left; }
+.reveal .slides .small{
+  font-size: 1.2em; }

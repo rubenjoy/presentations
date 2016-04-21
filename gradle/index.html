@@ -56,7 +56,7 @@
 					</p>
 				</section>
 
-				<section style="text-align: center;"data-markdown>
+				<section style="text-align: center;" data-markdown>
 					## Java builds
 					![alt text](images/java-build.svg "Typical Java build process")					
 				</section>
@@ -104,7 +104,7 @@
 					- Manual http://gradle.org/gradle-download/
 				</section>
 				<section>
-					<section data-markdown>
+					<section style="text-align: center;" data-markdown>
 						## Gradle Task
 						![alt text](images/gradle-task.svg "Gradle Task Diagram")
 					</section>
@@ -424,10 +424,135 @@
 						- Apply specific configuration (e.g. add organizational repositories or enforce standards)
 					</section>
 					<section data-markdown>
+						## Plugin Types
+						- Script
+						```gradle
+						apply from: 'other-build.gradle'
+						apply from: 'http://www.example.com/build/other-build.gradle'
+						```
+						- Binary
+						```gradle
+						// defined the plugin id
+						apply plugin: 'java'
+						// using full qualified name
+						apply plugin: 'com.mitrais.gradle.datagen' 
+						```
+					</section>
+					<section data-markdown>
+						binary plugins need to be available to the build classpath(only for non-core)
+						```
+						buildscript {
+							dependencies {
+								classpath("org.springframework.boot:spring-boot-gradle-plugin:1.3.3.RELEASE")
+							}
+						}
+						apply plugin: 'spring-boot'
+						```
+					</section>
+				</section>
+				<section>
+					<section data-markdown>
 						## Gradle Java Plugin
-						- Extend the Gradle model (e.g. add new DSL elements that can be configured)
-						- Configure the project according to conventions (e.g. add new tasks or configure sensible defaults)
-						- Apply specific configuration (e.g. add organizational repositories or enforce standards)
+						```gradle
+						apply plugin: 'java'
+						```
+						Tasks
+						```dos
+						Build tasks
+						-----------
+						compileJava - Compiles production Java source files using javac.
+						processResources - Copies production resources into the production resources directory.
+						classes - Assembles the production classes and resources directories.
+						compileTestJava - Compiles test Java source files using javac.
+						processTestResources - Copies test resources into the test resources directory.
+						testClasses - Assembles the test classes and resources directories.
+						jar - Assembles the JAR file
+						javadoc - Generates API documentation for the production Java source, using Javadoc
+						test - Runs the unit tests using JUnit or TestNG.
+						uploadArchives - Uploads artifacts in the archives configuration, including the JAR file.
+						clean - Deletes the project build directory.
+						cleanTaskName - Deletes files created by specified task. cleanJar will delete the JAR file created by the jar task, and cleanTest will delete the test results created by the test task.
+						```
+						details [here](https://docs.gradle.org/current/userguide/java_plugin.html).
+					</section>
+					<section data-markdown>
+						## Project Layout
+						```
+						project
+						├───src
+						│   └───main
+						│       └───java //Production Java source
+						│       └───resources //Production resources
+						│───────test
+						│       └───java //Test Java source
+						|       └───resources //Test resources
+						```
+						changed layout by passing sourceSets closure:
+						```gradle
+						//build.gradle
+						sourceSets {
+							main {
+								java {
+									srcDir 'src/java'
+								}
+								resources {
+									srcDir 'src/resources'
+								}
+							}
+						}
+						```
+					</section>					
+					<section data-markdown>
+						## Defining Repositories
+						```
+						//build.gradle
+						apply plugin: 'java'
+						repositories{
+							flatDir{
+								dirs 'libs'
+							}
+						}
+						repositories{
+							mavenCentral()
+							mavenLocal()
+							jcenter()							
+						}
+						repositories{
+							maven{
+								url: 'http://www.example.com/nexus/public'
+								credentials{
+									username admin
+									password admin
+								}
+							}
+						}
+						```
+					</section>
+					<section data-markdown>
+						## Defining Dependencies
+						```
+						//build.gradle
+						apply plugin: 'java'
+						dependencies{
+							compile 'com.google.guava:guava:19.0'
+						}
+						
+						dependencies{
+							compile group: 'com.google.guava', name: 'guava', version: '19.0'
+						}
+						
+						dependencies{
+							compile files('libs/guava.jar','libs/common-lang.jar')
+						}
+						```
+						```
+						dependencies{
+							compile 'com.google.guava:guava:19.0'
+							compileOnly: 'javax.servlet:javax.servlet-api:3.1.0'
+							testCompile 'org.junit:junit:4.12'
+						}
+						```
+						details [here](https://docs.gradle.org/current/dsl/org.gradle.api.artifacts.dsl.DependencyHandler.html)
 					</section>
 				</section>
 			</div>
