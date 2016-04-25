@@ -34,526 +34,641 @@
 	</head>
 
 	<body>
-		
+		<!-- Slides footer -->
+		<div class="footer">
+			<div class="left">www.mitrais.com</div>
+			<div class="right">continuous commitment</div>
+		</div>
 		<div class="reveal">
 			
 			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
-				
-				<!-- Slides footer -->
-				<div class="footer">
-					<div class="left">www.mitrais.com</div>
-					<div class="right">continuous commitment</div>
-				</div>
-				
 				<!-- Main slide for presentation title -->
-				<section data-state="main" data-background="images/master.png" data-background-size="contain">
-					<div style="height: 320px"></div>
-					<h1>Gradle</h1>
-					<h3>Java Build Tools</h3>
-					<p>
-						<small>Java Web Application Stack</small>
-					</p>
-				</section>
-
-				<section style="text-align: center;" data-markdown>
-					## Java builds
-					![alt text](images/java-build.svg "Typical Java build process")					
+				<section data-state="main" data-background="images/master.png" data-background-size="contain" data-markdown>
+					<script type="text/template">
+						# Gradle for Java Web Development <!-- .element: style="text-align: left" -->
+					</script>
 				</section>
 				<section>
 					<section data-markdown>
-						## Build Tools Advantages
-						- Portability
-						- Automation
-						- Repeatability
-					</section>
-					<section>
-						<img src="images/build-factory.png"/>
+						<script type="text/template">
+							## Java builds
+							![alt text](images/java-build.svg "Typical Java build process")
+						</script>
+					</section>				
+					<section data-markdown>
+						<script type="text/template">
+							### Build Tools Advantages
+							- Portability
+							- Automation
+							- Repeatability
+							
+							
+							![Build Factory](images/build-factory.png)							
+						</script>
 					</section>
 				</section>
-				<section data-markdown>
-					## Why Gradle?
-					
-					- One build tools for all language (Java, Python, C++, etc)
-					- Integrations with other tools (IDE, Jenkins, Ansible, NodeJS)
-					- Dependency management (Maven, Ivy, file system)
-					- Declarative and Imperative build scripts
-					- Performance (build what changed, caching)
-					- Reporting (dependency analysis, code coverage/quality analysis)
-				</section>
-				<section data-markdown>
-					## Installation				
-					
-					- [Gradle Wrapper](files/gradle-wrapper.zip) 
-					```
-					root-project
-						- gradle
-						- wrapper
-							- gradle-wrapper.jar
-							- gradle-wrapper.properties
-						- gradlew
-						- gradlew.bat			
-					```
-					- Software packager
-					```dos
-					apt-get install gradle
-					yum install gradle
-					brew install gradle
-					choco install gradle
-					```
-					- Manual http://gradle.org/gradle-download/
+				<section>
+					<section data-markdown>
+						<script type="text/template">
+							## Why Gradle?
+							
+							- One build tools for all language (Java, Python, C++, etc)
+							- Integrations with other tools (IDE, Jenkins, Ansible, NodeJS)
+							- Dependency management (Maven, Ivy, file system)
+							- Declarative and Imperative build scripts
+							- Performance (build what changed, caching)
+							- Reporting (dependency analysis, code coverage/quality analysis)
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							### Installation											
+							- Gradle Wrapper, get it [here](files/gradle-wrapper.zip) 
+							```dos
+							root-project
+								- gradle
+								- wrapper
+									- gradle-wrapper.jar
+									- gradle-wrapper.properties
+								- gradlew
+								- gradlew.bat			
+							```
+							- Software packager
+							```dos
+							apt-get install gradle
+							yum install gradle
+							brew install gradle
+							choco install gradle
+							```
+							- Manual http://gradle.org/gradle-download/
+						</script>
+					</section>
 				</section>
 				<section>
 					<section style="text-align: center;" data-markdown>
-						## Gradle Task
-						![alt text](images/gradle-task.svg "Gradle Task Diagram")
+						<script type="text/template">
+							## Gradle Task
+							![alt text](images/gradle-task.svg "Gradle Task Diagram")
+						</script>
 					</section>
 					<section data-markdown>
-						### Example
-						```gradle
-						//build.gradle
-						task hello{
-							doLast{
-								println "Hello World!"
+						<script type="text/template">
+							### Example
+							```gradle
+							//build.gradle
+							task hello{
+								doLast{
+									println "Hello World!"
+								}
 							}
-						}
-						```
-						```dos
-						C:\>gradle hello
-						:hello
-						Hello World!
-						```
+							```
+							```dos
+							C:\>gradle hello
+							:hello
+							Hello World!
+							```
+						</script>
 					</section>					
 				</section>
 				<section>
 					<section data-markdown>
-						## Groovy Fundamental
-						- Dynamic Typed
-						
-						```gradle
-						//build.gradle
-						def A = 9
-						println "A is a type of $(value.class) with value: $(value)"
-						A = "I'm a String"
-						println "A is a type of $(value.class) with value: $(value)"
-						```
-						```dos
-						C:\>gradle -q
-						A is a type of class java.lang.Integer with value: 9
-						A is a type of class java.lang.String with value: I'm a String
-						```
+						<script type="text/template">
+							## Groovy Fundamental
+						</script>
 					</section>
 					<section data-markdown>
-						- Most Java is a valid Groovy
-						
-						```java
-						//build.gradle
-						class Hello{
-							public void greet(String name){
-								System.out.println("Hello. "+name);
+						<script type="text/template">
+							### Dynamic Typed
+							
+							```gradle
+							//build.gradle
+							def A = 9
+							println "A is a type of $(value.class) with value: $(value)"
+							A = "I'm a String"
+							println "A is a type of $(value.class) with value: $(value)"
+							```
+							```dos
+							C:\>gradle -q
+							A is a type of class java.lang.Integer with value: 9
+							A is a type of class java.lang.String with value: I'm a String
+							```
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							### Most Java is a valid Groovy
+							
+							```java
+							//build.gradle
+							class Hello{
+								public void greet(String name){
+									System.out.println("Hello. "+name);
+								}
 							}
-						}
 
-						Hello hello = new Hello()
-						hello.greet("John");
-						```
-						```dos
-						C:\>gradle -q
-						Hello. John
-						```
+							Hello hello = new Hello()
+							hello.greet("John");
+							```
+							```dos
+							C:\>gradle -q
+							Hello. John
+							```
+						</script>
 					</section>
 					<section data-markdown>
-						- Function
-						
-						```gradle
-						//build.gradle
-						def plus(value){
-							println "$value = ${value + value}"
-						}
-						plus(8)
-						plus("abc")
-
-						// this should work also
-						plus 8
-						plus "abc"
-						```						
-						```dos
-						C:\>gradle -q
-						8 = 16
-						abc = abcabc
-						8 = 16
-						abc = abcabc
-						```
-					</section>
-					<section data-markdown>
-						- Closure
-						
-						```gradle
-						def value = 1
-
-						def theClosure = { param ->
-							println "value: ${param + value}"
-							param+value
-						}
-
-						theClosure(1)
-
-						def otherClosure = theClosure
-
-						otherClosure(1)
-
-						def functionUseClosure(closure, value){
-							closure(value) // apply once
-							closure(closure(value)) // apply twice
-						}
-
-						functionUseClosure(otherClosure, 2)
-						```
-					</section>
-					<section data-markdown>
-						- Closure cont'd
-						
-						```dos
-						C:\>gradle -q
-						value: 2
-						value: 2
-						value: 3
-						value: 3
-						value: 4
-						```
-					</section>
-					<section data-markdown>
-						- Closure Delegate
-						
-						```gradle
-						//build.gradle
-						class Hello{
-							public void greet(String name){
-								System.out.println("Hello. "+name);
+						<script type="text/template">
+							### Function
+							
+							```gradle
+							//build.gradle
+							def plus(value){
+								println "$value = ${value + value}"
 							}
-						}
+							plus(8)
+							plus("abc")
 
-						Hello hello = new Hello()
-
-						def closure = {name -> 
-							greet(name)
-						}
-
-						closure.delegate = hello
-						closure("Jim")
-						```
-						```dos
-						C:\>gradle -q
-						Hello, Jim
-						```
+							// this should work also
+							plus 8
+							plus "abc"
+							```						
+							```dos
+							C:\>gradle -q
+							8 = 16
+							abc = abcabc
+							8 = 16
+							abc = abcabc
+							```
+						</script>
 					</section>
 					<section data-markdown>
-						- List
-						
-						```gradle
-						//build.gradle
-						def persons = ["Jim", "John", "Jane"]
-						def printClosure = {person -> println "Hello, $person"}
+						<script type="text/template">
+							### Closure
+							
+							```gradle
+							def value = 1
 
-						persons.each(printClosure) 
+							def theClosure = { param ->
+								println "value: ${param + value}"
+								param+value
+							}
 
-						//persons.each({person -> println "Hello, $person"})
+							theClosure(1)
 
-						//persons.each{println "Hello, $it"}
-						```
-						```dos
-						C:\>gradle -q
-						Hello, Jim
-						Hello, John
-						Hello, Jane
-						```
+							def otherClosure = theClosure
+
+							otherClosure(1)
+
+							def functionUseClosure(closure, value){
+								closure(value) // apply once
+								closure(closure(value)) // apply twice
+							}
+
+							functionUseClosure(otherClosure, 2)
+							```
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							### Closure ...
+							
+							```dos
+							C:\>gradle -q
+							value: 2
+							value: 2
+							value: 3
+							value: 3
+							value: 4
+							```
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							### Closure Delegate
+							
+							```gradle
+							//build.gradle
+							class Hello{
+								public void greet(String name){
+									System.out.println("Hello. "+name);
+								}
+							}
+
+							Hello hello = new Hello()
+
+							def closure = {name -> 
+								greet(name)
+							}
+
+							closure.delegate = hello
+							closure("Jim")
+							```
+							```dos
+							C:\>gradle -q
+							Hello, Jim
+							```
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							### List
+							
+							```gradle
+							//build.gradle
+							def persons = ["Jim", "John", "Jane"]
+							def printClosure = {person -> println "Hello, $person"}
+
+							persons.each(printClosure) 
+
+							//persons.each({person -> println "Hello, $person"})
+
+							//persons.each{println "Hello, $it"}
+							```
+							```dos
+							C:\>gradle -q
+							Hello, Jim
+							Hello, John
+							Hello, Jane
+							```
+						</script>
 					</section>
 				</section>
 				<section>
 					<section data-markdown>
-						## Gradle task in depth
-						- Task Configuration						
-						```gradle
-						project.task("task1") // delegate closure to internal gradle engine
-						task("task2") // by default all closure will be delegated to project
-						task "task3" // function can be call without argument parentheses
-						task task4 // advanced feature of groovy
-						// configuring task
-						task4.description = "currently not doing anything"
-						task4.group = "Unused"
-						task4.doLast {println "See!, not doing anything"}
-						task "task5" << {println "Task5"}
-						// common way
-						task Task6{
-							description = "..."
-							group = "..."
-							doLast{
-								println "..."
-							}
-						}
-						```						
+						<script type="text/template">
+							## Gradle task in depth
+						</script>
 					</section>
 					<section data-markdown>
-						- Task Configuration cont'd						
-						```dos
-						C:\>gradle -q tasks
-						Unused tasks
-						------------
-						task4 - currently not doing anything
-
-						Other tasks
-						-----------
-						task1
-						task2
-						task3
-						task4
-						```
+						<script type="text/template">							
+							### Task Configuration						
+							```gradle
+							project.task("task1") // delegate closure to internal gradle engine
+							task("task2") // by default all closure will be delegated to project
+							task "task3" // function can be call without argument parentheses
+							task task4 // advanced feature of groovy
+							// configuring task
+							task4.description = "currently not doing anything"
+							task4.group = "Unused"
+							task4.doLast {println "See!, not doing anything"}
+							task "task5" << {println "Task5"}
+							// common way
+							task Task6{
+								description = "..."
+								group = "..."
+								doLast{
+									println "..."
+								}
+							}
+							```
+						</script>
 					</section>
 					<section data-markdown>
-						- Task Dependencies						
-						```gradle
-						//build.gradle
-						task insertCard{
-							doLast{
-								println "Card inserted."
-							}
-						}
+						<script type="text/template">
+							### Task Configuration cont'd						
+							```dos
+							C:\>gradle -q tasks
+							Unused tasks
+							------------
+							task4 - currently not doing anything
 
-						task inputPinNumber{
-							dependsOn insertCard
-							doLast{
-								println "PIN: 123456"
-							}
-						}
-
-						task inputDebitAmount{
-							mustRunAfter inputPinNumber
-							doLast{
-								println "Debited: xxxxxx."
-							}
-						}
-
-						task drawMoney{
-							dependsOn inputDebitAmount
-							doLast{
-								println "Money picked."
-							}
-						}
-
-						task checkBalance{
-							dependsOn inputPinNumber
-							doLast{
-								println "You got 200."
-							}
-						}
-						```
-					</section>
-					<section data-markdown>						
-						- Task Dependencies cont'd						
-						```dos
-						C:\>gradle checkBalance
-						:insertCard
-						Card inserted.
-						:inputPinNumber
-						PIN: 123456
-						:checkBalance
-						You got 200.
-						
-						C:\>gradle checkBalance drawMoney
-						:insertCard
-						Card inserted.
-						:inputPinNumber
-						PIN: 123456
-						:checkBalance
-						You got 200.
-						:inputDebitAmount
-						Debited: 100.
-						:drawMoney
-						Money picked.
-						```
+							Other tasks
+							-----------
+							task1
+							task2
+							task3
+							task4
+							```
+						</script>
 					</section>
 					<section data-markdown>
-						- Task Types						
-						```gradle
-						task copyFile(type: Copy){
-							from "resources"
-							include "*.xml"
-							into "build"
-						}
-						
-						task createArchive(type: Zip){
-							baseName = "archive"
-							destinationDir = file("build")
-							from "resources"
-						}
-						
-						task deleteFolder(type: Delete){
-							delete "build"
-						}
-						```
-						Details can be found on [Gradle DSL References](https://docs.gradle.org/current/dsl/)
+						<script type="text/template">
+							### Task Dependencies						
+							```gradle
+							//build.gradle
+							task insertCard{
+								doLast{
+									println "Card inserted."
+								}
+							}
+
+							task inputPinNumber{
+								dependsOn insertCard
+								doLast{
+									println "PIN: 123456"
+								}
+							}
+
+							task inputDebitAmount{
+								mustRunAfter inputPinNumber
+								doLast{
+									println "Debited: xxxxxx."
+								}
+							}
+
+							task drawMoney{
+								dependsOn inputDebitAmount
+								doLast{
+									println "Money picked."
+								}
+							}
+
+							task checkBalance{
+								dependsOn inputPinNumber
+								doLast{
+									println "You got 200."
+								}
+							}
+							```
+						</script>
+					</section>
+					<section data-markdown>				
+						<script type="text/template">
+							### Task Dependencies cont'd						
+							```dos
+							C:\>gradle checkBalance
+							:insertCard
+							Card inserted.
+							:inputPinNumber
+							PIN: 123456
+							:checkBalance
+							You got 200.
+							
+							C:\>gradle checkBalance drawMoney
+							:insertCard
+							Card inserted.
+							:inputPinNumber
+							PIN: 123456
+							:checkBalance
+							You got 200.
+							:inputDebitAmount
+							Debited: 100.
+							:drawMoney
+							Money picked.
+							```
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							### Task Types						
+							```gradle
+							task copyFile(type: Copy){
+								from "resources"
+								include "*.xml"
+								into "build"
+							}
+							
+							task createArchive(type: Zip){
+								baseName = "archive"
+								destinationDir = file("build")
+								from "resources"
+							}
+							
+							task deleteFolder(type: Delete){
+								delete "build"
+							}
+							```
+							<small>Details can be found on [Gradle DSL References](https://docs.gradle.org/current/dsl/)</small>
+						</script>
 					</section>
 				</section>
 				<section data-markdown>
-					## Parameterize Build 					
-					```gradle
-					//build.gradle
-					task printVars{
-						println var1
-						println var2						
-					}
-					```
-					- Command Line
-					
-					```
-					gradle printVars -P var1="Variable 1" -P var2="Variable 2"
-					```
-					- gradle.properties
-					
-					```
-					var1=Variable 1
-					var2=Variable 2
-					```
-					Learn more [here](https://docs.gradle.org/current/userguide/build_environment.html).
-				</section>
-				<section>
-					<section data-markdown>
-						## Gradle Plugins
-						- Extend the Gradle model (e.g. add new DSL elements that can be configured)
-						- Configure the project according to conventions (e.g. add new tasks or configure sensible defaults)
-						- Apply specific configuration (e.g. add organizational repositories or enforce standards)
-					</section>
-					<section data-markdown>
-						## Plugin Types
-						- Script
-						```gradle
-						apply from: 'other-build.gradle'
-						apply from: 'http://www.example.com/build/other-build.gradle'
-						```
-						- Binary
-						```gradle
-						// defined the plugin id
-						apply plugin: 'java'
-						// using full qualified name
-						apply plugin: 'com.mitrais.gradle.datagen' 
-						```
-					</section>
-					<section data-markdown>
-						binary plugins need to be available to the build classpath(only for non-core)
-						```
-						buildscript {
-							dependencies {
-								classpath("org.springframework.boot:spring-boot-gradle-plugin:1.3.3.RELEASE")
-							}
-						}
-						apply plugin: 'spring-boot'
-						```
-					</section>
-				</section>
-				<section>
-					<section data-markdown>
-						## Gradle Java Plugin
-						```gradle
-						apply plugin: 'java'
-						```
-						Tasks
-						```dos
-						Build tasks
-						-----------
-						compileJava - Compiles production Java source files using javac.
-						processResources - Copies production resources into the production resources directory.
-						classes - Assembles the production classes and resources directories.
-						compileTestJava - Compiles test Java source files using javac.
-						processTestResources - Copies test resources into the test resources directory.
-						testClasses - Assembles the test classes and resources directories.
-						jar - Assembles the JAR file
-						javadoc - Generates API documentation for the production Java source, using Javadoc
-						test - Runs the unit tests using JUnit or TestNG.
-						uploadArchives - Uploads artifacts in the archives configuration, including the JAR file.
-						clean - Deletes the project build directory.
-						cleanTaskName - Deletes files created by specified task. cleanJar will delete the JAR file created by the jar task, and cleanTest will delete the test results created by the test task.
-						```
-						details [here](https://docs.gradle.org/current/userguide/java_plugin.html).
-					</section>
-					<section data-markdown>
-						## Project Layout
-						```
-						project
-						├───src
-						│   └───main
-						│       └───java //Production Java source
-						│       └───resources //Production resources
-						│───────test
-						│       └───java //Test Java source
-						|       └───resources //Test resources
-						```
-						changed layout by passing sourceSets closure:
+					<script type="text/template">
+						## Parameterize Build 					
 						```gradle
 						//build.gradle
-						sourceSets {
-							main {
-								java {
-									srcDir 'src/java'
-								}
-								resources {
-									srcDir 'src/resources'
-								}
-							}
+						task printVars{
+							println var1
+							println var2						
 						}
 						```
+						- Command Line
+						
+						```
+						gradle printVars -P var1="Variable 1" -P var2="Variable 2"
+						```
+						- gradle.properties
+						
+						```
+						var1=Variable 1
+						var2=Variable 2
+						```
+						<small>Learn more [here](https://docs.gradle.org/current/userguide/build_environment.html).</small>
+					</script>
+				</section>
+				<section>
+					<section data-markdown>
+						<script type="text/template">
+						## Gradle Plugins
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							### Plugin goals
+							- Extend the Gradle model (e.g. add new DSL elements that can be configured)
+							- Configure the project according to conventions (e.g. add new tasks or configure sensible defaults)
+							- Apply specific configuration (e.g. add organizational repositories or enforce standards)
+						</script>						
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							### Plugin Types
+							- Script
+							
+							```gradle
+							apply from: 'other-build.gradle'
+							apply from: 'http://www.example.com/build/other-build.gradle'
+							```
+							- Binary
+							
+							```gradle
+							// defined the plugin id
+							apply plugin: 'java'
+							// using full qualified name
+							apply plugin: 'com.mitrais.gradle.datagen' 
+							```
+							<small>binary plugins need to be available to the build classpath(only for non-core)</small>
+							```
+							buildscript {
+								dependencies {
+									classpath("org.springframework.boot:spring-boot-gradle-plugin:1.3.3.RELEASE")
+								}
+							}
+							apply plugin: 'spring-boot'
+							```
+						</script>
+					</section>
+				</section>
+				<section>
+					<section data-markdown>
+						<script type="text/template">
+							## Gradle Java Plugin
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							### Usage
+							```gradle
+							apply plugin: 'java'
+							```
+							Tasks added by plugin
+							```dos
+							Build tasks
+							-----------
+							compileJava - Compiles production Java source files using javac.
+							processResources - Copies production resources into the production resources directory.
+							classes - Assembles the production classes and resources directories.
+							compileTestJava - Compiles test Java source files using javac.
+							processTestResources - Copies test resources into the test resources directory.
+							testClasses - Assembles the test classes and resources directories.
+							jar - Assembles the JAR file
+							javadoc - Generates API documentation for the production Java source, using Javadoc
+							test - Runs the unit tests using JUnit or TestNG.
+							uploadArchives - Uploads artifacts in the archives configuration, including the JAR file.
+							clean - Deletes the project build directory.
+							cleanTaskName - Deletes files created by specified task. cleanJar will delete the JAR file created by the jar task, and cleanTest will delete the test results created by the test task.
+							```
+							<small>details [here](https://docs.gradle.org/current/userguide/java_plugin.html).</small>
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							### Project Layout
+							```dos
+							project
+							├───src
+							│   └───main
+							│       └───java //Production Java source
+							│       └───resources //Production resources
+							│───────test
+							│       └───java //Test Java source
+							|       └───resources //Test resources
+							```
+							changed layout by passing sourceSets closure: 
+							```gradle
+							//build.gradle
+							sourceSets {
+								main {
+									java {
+										srcDir 'src/java'
+									}
+									resources {
+										srcDir 'src/resources'
+									}
+								}
+							}
+							```
+						</script>
 					</section>					
 					<section data-markdown>
-						## Defining Repositories
-						```
-						//build.gradle
-						apply plugin: 'java'
-						repositories{
-							flatDir{
-								dirs 'libs'
-							}
-						}
-						repositories{
-							mavenCentral()
-							mavenLocal()
-							jcenter()							
-						}
-						repositories{
-							maven{
-								url: 'http://www.example.com/nexus/public'
-								credentials{
-									username admin
-									password admin
+						<script type="text/template">
+							### Defining Repositories
+							```gradle
+							//build.gradle
+							apply plugin: 'java'
+							repositories{
+								flatDir{
+									dirs 'libs'
 								}
 							}
-						}
-						```
+							repositories{
+								mavenCentral()
+								mavenLocal()
+								jcenter()							
+							}
+							repositories{
+								maven{
+									url: 'http://www.example.com/nexus/public'
+									credentials{
+										username admin
+										password admin
+									}
+								}
+							}
+							```
+						</script>
 					</section>
 					<section data-markdown>
-						## Defining Dependencies
-						```
-						//build.gradle
-						apply plugin: 'java'
-						dependencies{
-							compile 'com.google.guava:guava:19.0'
-						}
-						
-						dependencies{
-							compile group: 'com.google.guava', name: 'guava', version: '19.0'
-						}
-						
-						dependencies{
-							compile files('libs/guava.jar','libs/common-lang.jar')
-						}
-						```
-						```
-						dependencies{
-							compile 'com.google.guava:guava:19.0'
-							compileOnly: 'javax.servlet:javax.servlet-api:3.1.0'
-							testCompile 'org.junit:junit:4.12'
-						}
-						```
-						details [here](https://docs.gradle.org/current/dsl/org.gradle.api.artifacts.dsl.DependencyHandler.html)
+						<script type="text/template">
+							### Defining Dependencies
+							```
+							//build.gradle
+							apply plugin: 'java'
+							dependencies{
+								compile 'com.google.guava:guava:19.0'
+							}
+							
+							dependencies{
+								compile group: 'com.google.guava', name: 'guava', version: '19.0'
+							}
+							
+							dependencies{
+								compile files('libs/guava.jar','libs/common-lang.jar')
+							}
+							```
+							```
+							dependencies{
+								compile 'com.google.guava:guava:19.0'
+								compileOnly: 'javax.servlet:javax.servlet-api:3.1.0'
+								testCompile 'org.junit:junit:4.12'
+							}
+							```
+							<small>details [here](https://docs.gradle.org/current/dsl/org.gradle.api.artifacts.dsl.DependencyHandler.html)</small>
+						</script>
 					</section>
+				</section>
+				<section>
+					<section data-markdown>
+						<script type="text/template">
+							## Gradle War Plugin							
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							### Usage and tasks provided
+							```gradle
+							apply plugin: 'war' 
+							```
+							```dos
+							Build tasks
+							-----------
+							war - Assembles the application WAR file.
+							```
+							<small>*the plugin will apply java plugin automatically*</small>
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							### Project Layout
+							```
+							project
+							├───src
+							│   └───main
+							│       └───java
+							│       └───resources
+							│       └───webapp //Web application sources
+							│───────test
+							│       └───java
+							|       └───resources
+							```
+							Customization
+							```gradle
+							war {
+								from 'src/rootContent' // adds a file-set to the root of the archive
+								webInf { from 'src/additionalWebInf' } // adds a file-set to the WEB-INF dir.
+								classpath fileTree('additionalLibs') // adds a file-set to the WEB-INF/lib dir.
+								classpath configurations.moreLibs // adds a configuration to the WEB-INF/lib dir.
+								webXml = file('src/someWeb.xml') // copies a file to WEB-INF/web.xml
+							}
+							```
+							<small>details [here](https://docs.gradle.org/current/userguide/war_plugin.html).</small>
+						</script>
+					</section>
+				</section>
+				<section data-markdown>
+					<script type="text/template">
+						## Questions?
+					</script>
 				</section>
 			</div>
 
@@ -572,7 +687,7 @@
 				history: true,
 				center: true,
 
-				transition: 'slide', // none/fade/slide/convex/concave/zoom
+				transition: 'default', // none/fade/slide/convex/concave/zoom
 
 				// Optional reveal.js plugins
 				dependencies: [
