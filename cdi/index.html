@@ -212,21 +212,210 @@
 						--
 
 						### API
-						- @Named - String-based qualifier.
 						- @Inject - Identifies injectable constructors, methods, and fields.
+						- @Named - String-based qualifier.
 						- @Qualifier - Identifies qualifier annotations.
-						- @Scope - Identifies scope annotations.
 						- @Singleton - Identifies a type that the injector only instantiates once.
+						- @Scope - Identifies scope annotations.
 						- Provider&lt;T&gt; - Provides instances of T.
 
 						<small>All of the api is in *javax.inject* package</small>
 
 						--
 
+						<!-- .slide: class="large-code" -->
+						### @Inject
+						```java
+						public class GenericPaymentService implements PaymentService
+						{
+						    private PaymentGateway gateway;
+
+						    @Inject
+						    public GenericPaymentService(PaymentGateway gateway)
+						    {
+						        this.gateway = gateway;
+						    }						    
+						}
+						```
+						```java
+						public class GenericPaymentService implements PaymentService
+						{
+						    private PaymentGateway gateway;
+
+						    @Inject
+						    public void setPaymentGateway(PaymentGateway gateway)
+						    {
+						        this.gateway = gateway;
+						    }						    
+						}
+						```
+						```java
+						public class GenericPaymentService implements PaymentService
+						{							
+						    @Inject
+						    private PaymentGateway gateway;
+						}
+						```
+
+						--
+
+						<!-- .slide: class="large-code" -->
 						### @Named
+						```java
+							//...
+						    @Inject
+						    @Named("paypal")
+						    public GenericPaymentService(PaymentGateway gateway)
+						    {
+						        this.gateway = gateway;
+						    }
+							//...
+						```
+						```java
+						    //...
+						    @Inject
+						    @Named("paypal")
+						    public void setPaymentGateway(PaymentGateway gateway)
+						    {
+						        this.gateway = gateway;
+						    }
+						    //...
+						```
+						```java
+							//...
+						    @Inject
+						    @Named("paypal")
+						    private PaymentGateway gateway;
+							//...
+						```
+
+						--
+
+						<!-- .slide: class="large-code" -->
+						### @Qualifier
+						```java
+						@Target({FIELD,METHOD,TYPE,PARAMETER})
+						@Retention(RUNTIME)
+						@Qualifier
+						public @interface Paypal{}
+						```
+						```java
+						@Target({FIELD,METHOD,TYPE,PARAMETER})
+						@Retention(RUNTIME)
+						@Qualifier
+						public @interface BitCoin{}
+						```
+						```java
+							//...
+						    @Inject
+						    public GenericPaymentService(@Paypal PaymentGateway gateway)
+						    {
+							//...
+						```
+						```java
+						    //...
+						    @Inject
+						    @BitCoin
+						    public void setPaymentGateway(PaymentGateway gateway)
+						    {
+						    //...
+						```
+						```java
+							//...
+						    @Inject
+						    @Paypal
+						    private PaymentGateway gateway;
+							//...
+						```
+
+						--
+
+						### @Singleton						
+						```java
+						@Singleton
+						public class SingletonCounter implements SingletonCountable
+						{
+						    private int counter = 0;
+
+						    @Override
+						    public int count()
+						    {
+						        counter++;
+						        System.out.printf("Singleton Counter : %d\n", counter);
+						        return counter;
+						    }
+						}
+						```
+
+						--
+
+						<!-- .slide: class="large-code" -->
+						### @Scope
+						```java
+						@Scope
+						@Documented
+						@Retention(RetentionPolicy.RUNTIME)
+						public @interface WebRequestScope{}
+						```
+						```java
+						@Scope
+						@Documented
+						@Retention(RetentionPolicy.RUNTIME)
+						public @interface WebSessionScope{}
+						```
+						```java
+						// spring implementation
+						public class CustomScopeMetadataResolver extends Jsr330ScopeMetadataResolver
+						{
+						    public CustomScopeMetadataResolver()
+						    {
+						        registerScope(WebRequestScope.class.getName(), WebApplicationContext.SCOPE_REQUEST);
+						        registerScope(WebSessionScope.class.getName(), WebApplicationContext.SCOPE_SESSION);
+						    }
+						}
+						```
+
+						--
+
+						<!-- .slide: class="large-code" -->
+						### Provider interface
+						```java
+						@Named
+						public class AirPlane implements Travel
+						{
+						    //...
+						}
+						```
+						```java
+						@Named
+						public class Car implements Travel
+						{
+						    //...
+						}
+						```
+						```java
+						public class TravelService
+						{
+						    @Inject
+						    private Provider<Car> carProvider;
+
+						    @Inject
+						    private Provider<AirPlane> airPlaneProvider;
+
+						    public int travelByCar()
+						    {
+						        Travel travel = carProvider.get();
+						        return travel.travel();
+						    }
+						    public int travelByAirPlane()
+						    {
+						        Travel travel = airPlaneProvider.get();
+						        return travel.travel();
+						    }
+						}
+						```
 					</script>
-				</section>				
-			</div>
+				</section>			</div>
 
 		</div>
 
