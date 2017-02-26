@@ -1,0 +1,159 @@
+/**
+ * Mitrais theme for reveal.js.
+ *
+ * By kustian@mitrais.com
+ */
+
+
+// Default mixins and settings -----------------
+@import "../template/mixins";
+@import "../template/settings";
+// ---------------------------------------------
+
+
+// Include theme-specific fonts
+@import url(../../lib/font/source-sans-pro/source-sans-pro.css);
+@import url(../../lib/css/font-awesome/css/font-awesome.min.css);
+
+// Override theme settings (see ../template/settings.scss)
+$backgroundColor: #fff;
+
+$mainColor: #6200C0;
+$headingColor: #6200C0;
+
+$mainFontSize: 38px;
+$mainFont: 'Source Sans Pro', Helvetica, sans-serif;
+$headingFont: 'Source Sans Pro', Helvetica, sans-serif;
+$headingTextShadow: none;
+$headingLetterSpacing: normal;
+$headingTextTransform: uppercase;
+$headingFontWeight: 600;
+$linkColor: #42affa;
+$linkColorHover: lighten( $linkColor, 15% );
+$selectionBackgroundColor: lighten( $linkColor, 25% );
+
+$heading1Size: 2.5em;
+$heading2Size: 1.6em;
+$heading3Size: 1.3em;
+$heading4Size: 1.0em;
+
+section.has-light-background {
+	&, h1, h2, h3, h4, h5, h6 {
+		color: #222;
+	}
+}
+
+// Theme template ------------------------------
+@import "../template/theme";
+// ---------------------------------------------
+.main .slides{
+  background: transparent;
+}
+
+.main .slides .footer{
+  display: none;
+}
+
+.main body {
+  @include bodyBackground();
+  background-color: #6200C0;
+}
+
+.main .reveal {
+  font-family: $mainFont;
+  font-size: $mainFontSize;
+  font-weight: normal;
+  color: #fff;
+}
+.main .reveal h1,
+.main .reveal h2,
+.main .reveal h3,
+.main .reveal h4,
+.main .reveal h5,
+.main .reveal h6 {
+  margin: $headingMargin;
+  color: #fff;
+
+  font-family: $headingFont;
+  font-weight: $headingFontWeight;
+  line-height: $headingLineHeight;
+  letter-spacing: $headingLetterSpacing;
+
+  text-transform: $headingTextTransform;
+  text-shadow: $headingTextShadow;
+  word-wrap: break-word;
+}
+.main {
+  .footer {
+    display: none;
+  }
+  section {
+    color: #fff;
+    top: 344px !important;
+  }
+}
+.main .reveal .slides > section{
+  width: 80%;
+  left:10%;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  height: 30px;
+  text-align: center;
+  line-height: 30px;
+  vertical-align: middle;
+  width: 100%;
+  background: #6200C0;
+  color: #fff;
+  .left, .right {
+    width: 50%;
+    float: left;
+  }
+}
+.reveal{
+  &.center{
+    min-height: 100% !important;
+    .slides{
+      min-height: 100% !important;
+      text-align: left;
+      h1, h2, h3, h4{
+        text-align: center;
+      }
+      section{
+        min-height: 100% !important;
+      }
+    }
+  }
+  .controls{
+    bottom: 30px;
+  }
+
+}
+.reveal ul, .reveal ul ul {
+  list-style: none;
+  width: 100%;
+}
+.reveal li {
+  //padding-left: 10px;
+  text-indent: -1em;
+}
+.reveal.center, .reveal.center .slides, .reveal.center .slides section {
+  min-height: 100% !important;
+}
+
+li:before {
+  font-family: 'FontAwesome';
+  content: '\f14a';
+  margin:0 15px 0 -15px;
+}
+
+ul ul li:before {
+  font-family: 'FontAwesome';
+  content: '\f192';
+  margin:0 15px 0 -15px;
+}
+.reveal section img{
+  margin: 0 auto;
+  display:block;
+}

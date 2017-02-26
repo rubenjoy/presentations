@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Dependency Injection (DI)</title>
+
+		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+		<meta name="author" content="Hakim El Hattab">
+
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="../../css/reveal.css">
+		<link rel="stylesheet" href="../../css/theme/mitrais.css" id="theme">
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="../../lib/css/zenburn.css">
+			
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? '../../csscss/print/pdf.css' : '../../csscss/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+		<style type="text/css">
+		.large-code > pre > code {
+			max-height: 700px;
+		}
+		.large-code > pre {
+			max-height: 700px;
+			font-size: 0.4em;
+		}
+		</style>
+		<!--[if lt IE 9]>
+		<script src="../../lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+		<!-- Slides footer -->
+		<div class="footer">
+			<div class="left">www.mitrais.com</div>
+			<div class="right">continuous commitment</div>
+		</div>
+		<div class="reveal">
+			
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section data-markdown data-separator="^\n---\n$" data-separator-vertical="^\n--\n$">
+					<script type="text/template">
+						<!-- .slide: data-state="main" data-background="../../images/master.png" data-background-size="contain" -->
+						# Dependency Injection (DI) <!-- .element: style="text-align: left;font-size: 2em;" -->
+
+						---
+
+						## Definition
+
+						> <small>When you go and get things out of the refrigerator for yourself, you can cause problems. You might leave the door open, you might get something Mommy or Daddy doesn't want you to have. You might even be looking for something we don't even have or which has expired.				
+						What you should be doing is stating a need, "I need something to drink with lunch," and then we will make sure you have something when you sit down to eat.</small>
+
+						<small style="float:right">John Munsch, 28 October 2009</small>
+
+						--
+
+						![DI](images/di-kids.png)
+
+						--
+
+						### Wikipedia
+						- is a software design pattern that implements *inversion of control* for resolving dependencies.
+						- allows a program design to follow the dependency *inversion principle*. (remember SOLID?)
+
+						--
+
+						<!-- .slide: class="large-code" -->
+						```java
+						interface DBConnection{
+							int getType();
+						}
+						class PGSQLConnection implements DBConnection{
+							public int getType(){
+								return 1;
+							}
+						}
+						class MYSQLConnection implements DBConnection{
+							public int getType(){
+								return 2;
+							}
+						}
+						class DatabaseService{
+							DBConnection conn;
+							DatabaseService(){
+								conn = new PGSQLConnection();
+								//conn = new MYSQLConnection();
+							}
+							public int getDatabaseType(){
+								return conn.getType();
+							}
+						}
+						```
+						<small>the code is coupled with the implementation</small>						
+
+						--
+
+						<!-- .slide: class="large-code" -->
+						```java
+						class DatabaseService{
+							DBConnection conn;
+							DatabaseService(){
+								conn = PGSQLConnection.getInstance();
+								//conn = new PGSQLConnection();
+							}
+							//...
+						}
+						class OtherDatabaseService{
+							DBConnection conn;
+							OtherDatabaseService(){
+								conn = PGSQLConnection.getInstance();
+								//conn = new PGSQLConnection();
+							}
+							//...
+						}
+						```
+						<small>what if we need a shared object?</small>
+
+						--
+
+						<!-- .slide: class="large-code" -->
+						### Using *Constructor* Dependency Injection
+						```java
+						class DatabaseService{
+							DBConnection conn;
+
+							@Inject
+							DatabaseService(DBConnection conn){
+								this.conn = conn;
+							}
+							//...
+						}
+						class OtherDatabaseService{
+							DBConnection conn;
+
+							@Inject
+							OtherDatabaseService(DBConnection conn){
+								this.conn = conn;
+							}
+							//...
+						}
+						```
+
+						--
+
+						<!-- .slide: class="large-code" -->
+						### Using *Setter* Dependency Injection
+						```java
+						class DatabaseService{
+							DBConnection conn;
+
+							@Inject
+							public void setDBConnection(DBConnection conn){
+								this.conn = conn;
+							}
+							//...
+						}
+						class OtherDatabaseService{
+							DBConnection conn;
+
+							@Inject
+							public void setDBConnection(DBConnection conn){
+								this.conn = conn;
+							}
+							//...
+						}
+						```
+
+						--
+
+						### Easy to test
+						```java
+						@Test
+						public void DatabaseServicePGSQLTest(){
+							DBConnection conn = new MockConnection();
+							DatabaseService service = new DatabaseService(conn);
+							// service.DBConnection(conn);
+							assertEquals(1, service.getDatabaseType());
+						}
+						```
+
+						---
+
+						## Java Specification
+
+						--
+
+						### History
+
+						- JSR-299: Contexts and Dependency Injection for the JavaTM EE 6 platform. <!-- .element: class="fragment" data-fragment-index="1" -->
+						- JSR-330: Dependency Injection for Java <!-- .element: class="fragment" data-fragment-index="2" -->
+						- JSR-346: Contexts and Dependency Injection for the JavaTM EE 7 platform <!-- .element: class="fragment" data-fragment-index="3" -->
+
+						---
+
+						## JSR-330: Dependency Injection for Java
+
+						--
+
+						### API
+						- @Inject - Identifies injectable constructors, methods, and fields.
+						- @Named - String-based qualifier.
+						- @Qualifier - Identifies qualifier annotations.
+						- @Singleton - Identifies a type that the injector only instantiates once.
+						- @Scope - Identifies scope annotations.
+						- Provider&lt;T&gt; - Provides instances of T.
+
+						<small>All of the api is in *javax.inject* package</small>
+
+						--
+
+						<!-- .slide: class="large-code" -->
+						### @Inject
+						```java
+						public class GenericPaymentService implements PaymentService
+						{
+						    private PaymentGateway gateway;
+
+						    @Inject
+						    public GenericPaymentService(PaymentGateway gateway)
+						    {
+						        this.gateway = gateway;
+						    }						    
+						}
+						```
+						```java
+						public class GenericPaymentService implements PaymentService
+						{
+						    private PaymentGateway gateway;
+
+						    @Inject
+						    public void setPaymentGateway(PaymentGateway gateway)
+						    {
+						        this.gateway = gateway;
+						    }						    
+						}
+						```
+						```java
+						public class GenericPaymentService implements PaymentService
+						{							
+						    @Inject
+						    private PaymentGateway gateway;
+						}
+						```
+
+						--
+
+						<!-- .slide: class="large-code" -->
+						### @Named
+						```java
+							//...
+						    @Inject
+						    @Named("paypal")
+						    public GenericPaymentService(PaymentGateway gateway)
+						    {
+						        this.gateway = gateway;
+						    }
+							//...
+						```
+						```java
+						    //...
+						    @Inject
+						    @Named("paypal")
+						    public void setPaymentGateway(PaymentGateway gateway)
+						    {
+						        this.gateway = gateway;
+						    }
+						    //...
+						```
+						```java
+							//...
+						    @Inject
+						    @Named("paypal")
+						    private PaymentGateway gateway;
+							//...
+						```
+
+						--
+
+						<!-- .slide: class="large-code" -->
+						### @Qualifier
+						```java
+						@Target({FIELD,METHOD,TYPE,PARAMETER})
+						@Retention(RUNTIME)
+						@Qualifier
+						public @interface Paypal{}
+						```
+						```java
+						@Target({FIELD,METHOD,TYPE,PARAMETER})
+						@Retention(RUNTIME)
+						@Qualifier
+						public @interface BitCoin{}
+						```
+						```java
+							//...
+						    @Inject
+						    public GenericPaymentService(@Paypal PaymentGateway gateway)
+						    {
+							//...
+						```
+						```java
+						    //...
+						    @Inject
+						    @BitCoin
+						    public void setPaymentGateway(PaymentGateway gateway)
+						    {
+						    //...
+						```
+						```java
+							//...
+						    @Inject
+						    @Paypal
+						    private PaymentGateway gateway;
+							//...
+						```
+
+						--
+
+						### @Singleton						
+						```java
+						@Singleton
+						public class SingletonCounter implements SingletonCountable
+						{
+						    private int counter = 0;
+
+						    @Override
+						    public int count()
+						    {
+						        counter++;
+						        System.out.printf("Singleton Counter : %d\n", counter);
+						        return counter;
+						    }
+						}
+						```
+
+						--
+
+						<!-- .slide: class="large-code" -->
+						### @Scope
+						```java
+						@Scope
+						@Documented
+						@Retention(RetentionPolicy.RUNTIME)
+						public @interface WebRequestScope{}
+						```
+						```java
+						@Scope
+						@Documented
+						@Retention(RetentionPolicy.RUNTIME)
+						public @interface WebSessionScope{}
+						```
+						```java
+						// spring implementation
+						public class CustomScopeMetadataResolver extends Jsr330ScopeMetadataResolver
+						{
+						    public CustomScopeMetadataResolver()
+						    {
+						        registerScope(WebRequestScope.class.getName(), WebApplicationContext.SCOPE_REQUEST);
+						        registerScope(WebSessionScope.class.getName(), WebApplicationContext.SCOPE_SESSION);
+						    }
+						}
+						```
+
+						--
+
+						<!-- .slide: class="large-code" -->
+						### Provider interface
+						```java
+						@Named
+						public class AirPlane implements Travel
+						{
+						    //...
+						}
+						```
+						```java
+						@Named
+						public class Car implements Travel
+						{
+						    //...
+						}
+						```
+						```java
+						public class TravelService
+						{
+						    @Inject
+						    private Provider<Car> carProvider;
+
+						    @Inject
+						    private Provider<AirPlane> airPlaneProvider;
+
+						    public int travelByCar()
+						    {
+						        Travel travel = carProvider.get();
+						        return travel.travel();
+						    }
+						    public int travelByAirPlane()
+						    {
+						        Travel travel = airPlaneProvider.get();
+						        return travel.travel();
+						    }
+						}
+						```
+					</script>
+				</section>			</div>
+
+		</div>
+
+		<script src="../../lib/js/head.min.js"></script>
+		<script src="../../js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+			    width: '100%',
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'default', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: '../../lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: '../../plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: '../../plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: '../../plugin/highlight/highlight.js', async: true, callback: function() { 
+						hljs.initHighlightingOnLoad(); 
+					} },
+					{ src: '../../plugin/zoom-js/zoom.js', async: true },
+					{ src: '../../plugin/notes/notes.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
