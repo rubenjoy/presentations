@@ -36,7 +36,7 @@ A platform is the hardware or software environment in which a program runs.
 
 # JVM Languages
 
-![alt text](images/jvm-Languages.png "JVM Languages")
+![alt text](images/jvm-languages.png "JVM Languages") <!-- .element: width="100%" -->
 
 ---
 
