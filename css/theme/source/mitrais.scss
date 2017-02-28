@@ -128,6 +128,9 @@ section.has-light-background {
   .controls{
     bottom: 30px;
   }
+  pre{
+    width: 100%
+  }
 
 }
 .reveal ul, .reveal ul ul {
@@ -155,5 +158,6 @@ ul ul li:before {
 }
 .reveal section img{
   margin: 0 auto;
+  border: none;
   display:block;
 }

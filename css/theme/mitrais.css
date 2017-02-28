@@ -362,6 +362,9 @@ body {
 .reveal .controls {
   bottom: 30px; }
 
+.reveal pre {
+  width: 100%; }
+
 .reveal ul, .reveal ul ul {
   list-style: none;
   width: 100%; }
@@ -384,4 +387,5 @@ ul ul li:before {
 
 .reveal section img {
   margin: 0 auto;
+  border: none;
   display: block; }
