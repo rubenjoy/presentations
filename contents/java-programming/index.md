@@ -179,3 +179,37 @@ public class HelloWorld {
 ## Structure
 
 ![alt text](images/maven-project-layout.png "Maven Structure") <!-- .element: height="500px" -->
+
+---
+
+## Simple POM
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.mitrais.training</groupId>
+    <artifactId>java-training</artifactId>
+    <packaging>jar</packaging>
+    <version>1.0</version>
+
+    <dependencies>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.31</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>
+
+```
