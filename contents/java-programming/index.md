@@ -53,6 +53,7 @@ A platform is the hardware or software environment in which a program runs.
 
 ![alt text](images/mother-of-lang.png "Maven Structure") <!-- .element: class="fragment bottom-left" -->
 
+
 ---
 
 ## "Hello World!"

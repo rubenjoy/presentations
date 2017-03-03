@@ -104,6 +104,7 @@ At my previous company, we used TFS - and the general motto was 'less branches, 
 
 With git, we are able to create branches locally, switch between them, commit changes all without needing a network connection. This also makes it really easy to do smaller branches that are more focused.
 
+
 ---
 
 ## Easily curated commits
