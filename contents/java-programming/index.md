@@ -1,4 +1,5 @@
 <!-- .slide: data-state="main" data-background="../../images/master.png" data-background-size="contain" -->
+
 # Java Programming <!-- .element: style="text-align: center;font-size: 2em;" -->
 
 ---
@@ -211,5 +212,41 @@ public class HelloWorld {
         </dependency>
     </dependencies>
 </project>
-
 ```
+
+---
+
+## Maven Installation
+
+- Verify Prerequisites
+    - JDK 1.4+
+    - JAVA_HOME set to JDK installation root
+- Download Maven
+    - http://maven.apache.org/download.html
+    - Maven 3.3.9
+- Unpack Download
+    - Extract to target installation
+
+---
+
+- Set Maven Home
+    - Set variable MAVEN_HOME to the installation path
+    - contains bin, boot, conf, and lib directories
+- Add MAVEN_HOME bin directory to execution path
+    - add %MAVEN_HOME%\bin to PATH environment setting
+- Check if maven is already installed
+    - open command line and type 'mvn -version'
+
+![alt text](images/maven-check-version.png "Maven version")
+
+---
+
+# Perform Build Activities
+- General build tasks
+    - mvn clean
+    - mvn compile
+    - mvn test mvn test
+    - mvn package
+    - mvn install
+- Optionally, specify multiple build tasks
+    - mvn clean install
