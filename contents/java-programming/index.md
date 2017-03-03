@@ -1,8 +1,3 @@
-<!-- .slide: data-state="main" data-background="../../images/master.png" data-background-size="contain" -->
-# Java Programming <!-- .element: style="text-align: center;font-size: 2em;" -->
-
----
-
 # Part 1 Overview
 
 - Characteristics
@@ -54,7 +49,9 @@ A platform is the hardware or software environment in which a program runs.
 
 ## JVM Languages
 
-![alt text](images/jvm-languages.png "JVM Languages") <!-- .element: width="100%" -->
+![alt text](images/jvm-languages.png "JVM Languages") <!-- .element: width="70%" -->
+
+![alt text](images/mother-of-lang.png "Maven Structure") <!-- .element: class="fragment bottom-left" -->
 
 ---
 
@@ -150,6 +147,18 @@ public class HelloWorld {
 
 ---
 
+## Java builds
+
+Build Tools Advantages
+
+- Portability
+- Automation
+- Repeatability
+
+![alt text](../gradle/images/java-build.svg "Typical Java build process")
+
+---
+
 ## Mindset
 
 - All build systems are essentially the same:
@@ -182,7 +191,25 @@ public class HelloWorld {
 
 ---
 
-## Simple POM
+## Setup & Install
+
+- Download [https://maven.apache.org/download.cgi](https://maven.apache.org/download.cgi)
+- Extract to local directory e.g. `C:\maven` or `/opt/maven`
+- Create or modify `PATH` environment variable to include maven executable e.g. `c:\maven\bin`
+- Test maven with command `mvn -v`
+
+```
+Apache Maven 3.2.5 (12a6b3acb947671f09b81f49094c53f426d8cea1; 2014-12-15T00:29:23+07:00)
+Maven home: D:\Tools\apache-maven-3.2.5
+Java version: 1.8.0_45, vendor: Oracle Corporation
+Java home: D:\Tools\Java\jdk1.8.0_45\jre
+Default locale: en_US, platform encoding: UTF-8
+OS name: "windows 7", version: "6.1", arch: "amd64", family: "dos"
+```
+
+---
+
+## POM Structure
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>

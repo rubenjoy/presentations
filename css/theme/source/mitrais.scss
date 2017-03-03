@@ -12,7 +12,9 @@
 
 
 // Include theme-specific fonts
+@import url(../../lib/font/source-code-pro/source-code-pro.css);
 @import url(../../lib/font/source-sans-pro/source-sans-pro.css);
+@import url(../../lib/font/quicksand/quicksand.css);
 @import url(../../lib/css/font-awesome/css/font-awesome.min.css);
 
 // Override theme settings (see ../template/settings.scss)
@@ -21,9 +23,9 @@ $backgroundColor: #fff;
 $mainColor: #6200C0;
 $headingColor: #6200C0;
 
-$mainFontSize: 38px;
-$mainFont: 'Source Sans Pro', Helvetica, sans-serif;
-$headingFont: 'Source Sans Pro', Helvetica, sans-serif;
+$mainFontSize: 28pt;
+$mainFont: Source Sans Pro, Helvetica, sans-serif;
+$headingFont: Quicksand, Source Sans Pro, Helvetica, sans-serif;
 $headingTextShadow: none;
 $headingLetterSpacing: normal;
 $headingTextTransform: uppercase;
@@ -32,9 +34,9 @@ $linkColor: #42affa;
 $linkColorHover: lighten( $linkColor, 15% );
 $selectionBackgroundColor: lighten( $linkColor, 25% );
 
-$heading1Size: 2.0em;
-$heading2Size: 1.6em;
-$heading3Size: 1.3em;
+$heading1Size: 1.6em;
+$heading2Size: 1.3em;
+$heading3Size: 1.1em;
 $heading4Size: 1.0em;
 
 section.has-light-background {
@@ -131,6 +133,13 @@ section.has-light-background {
   pre{
     width: 100%
   }
+  :not(pre) > code {
+    background-color: #ececec;
+    padding: 1px 5px;
+  }
+  code{
+    font-family: Source Code Pro;
+  }
 
 }
 .reveal ul, .reveal ul ul {
@@ -160,4 +169,10 @@ ul ul li:before {
   margin: 0 auto;
   border: none;
   display:block;
+  box-shadow: none;
+}
+.reveal p img.bottom-left{
+    position: absolute;
+    bottom: 100px;
+    left: 0px;
 }
