@@ -21,16 +21,11 @@
 $backgroundColor: #fff;
 
 $mainColor: #6200C0;
-$headingColor: #6200C0;
+$headingColor: $mainColor;
 
 $mainFontSize: 28pt;
 $mainFont: Source Sans Pro, Helvetica, sans-serif;
 $headingFont: Quicksand, Source Sans Pro, Helvetica, sans-serif;
-$headingTextShadow: none;
-$headingLetterSpacing: normal;
-$headingTextTransform: uppercase;
-$headingFontWeight: 600;
-$linkColor: #42affa;
 $linkColorHover: lighten( $linkColor, 15% );
 $selectionBackgroundColor: lighten( $linkColor, 25% );
 
@@ -39,11 +34,6 @@ $heading2Size: 1.3em;
 $heading3Size: 1.1em;
 $heading4Size: 1.0em;
 
-section.has-light-background {
-	&, h1, h2, h3, h4, h5, h6 {
-		color: #222;
-	}
-}
 
 // Theme template ------------------------------
 @import "../template/theme";
@@ -114,19 +104,6 @@ section.has-light-background {
   }
 }
 .reveal{
-  &.center{
-    min-height: 100% !important;
-    .slides{
-      min-height: 100% !important;
-      text-align: left;
-      h1, h2, h3, h4{
-        text-align: center;
-      }
-      section{
-        min-height: 100% !important;
-      }
-    }
-  }
   .controls{
     bottom: 30px;
   }
@@ -150,9 +127,7 @@ section.has-light-background {
   //padding-left: 10px;
   text-indent: -1em;
 }
-.reveal.center, .reveal.center .slides, .reveal.center .slides section {
-  min-height: 100% !important;
-}
+
 
 li:before {
   font-family: 'FontAwesome';
