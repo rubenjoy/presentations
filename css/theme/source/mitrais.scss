@@ -12,36 +12,28 @@
 
 
 // Include theme-specific fonts
+@import url(../../lib/font/source-code-pro/source-code-pro.css);
 @import url(../../lib/font/source-sans-pro/source-sans-pro.css);
+@import url(../../lib/font/quicksand/quicksand.css);
 @import url(../../lib/css/font-awesome/css/font-awesome.min.css);
 
 // Override theme settings (see ../template/settings.scss)
 $backgroundColor: #fff;
 
 $mainColor: #6200C0;
-$headingColor: #6200C0;
+$headingColor: $mainColor;
 
-$mainFontSize: 38px;
-$mainFont: 'Source Sans Pro', Helvetica, sans-serif;
-$headingFont: 'Source Sans Pro', Helvetica, sans-serif;
-$headingTextShadow: none;
-$headingLetterSpacing: normal;
-$headingTextTransform: uppercase;
-$headingFontWeight: 600;
-$linkColor: #42affa;
+$mainFontSize: 28pt;
+$mainFont: Source Sans Pro, Helvetica, sans-serif;
+$headingFont: Quicksand, Source Sans Pro, Helvetica, sans-serif;
 $linkColorHover: lighten( $linkColor, 15% );
 $selectionBackgroundColor: lighten( $linkColor, 25% );
 
-$heading1Size: 2.0em;
-$heading2Size: 1.6em;
-$heading3Size: 1.3em;
+$heading1Size: 1.6em;
+$heading2Size: 1.3em;
+$heading3Size: 1.1em;
 $heading4Size: 1.0em;
 
-section.has-light-background {
-	&, h1, h2, h3, h4, h5, h6 {
-		color: #222;
-	}
-}
 
 // Theme template ------------------------------
 @import "../template/theme";
@@ -112,24 +104,18 @@ section.has-light-background {
   }
 }
 .reveal{
-  &.center{
-    min-height: 100% !important;
-    .slides{
-      min-height: 100% !important;
-      text-align: left;
-      h1, h2, h3, h4{
-        text-align: center;
-      }
-      section{
-        min-height: 100% !important;
-      }
-    }
-  }
   .controls{
     bottom: 30px;
   }
   pre{
     width: 100%
+  }
+  :not(pre) > code {
+    background-color: #ececec;
+    padding: 1px 5px;
+  }
+  code{
+    font-family: Source Code Pro;
   }
 
 }
@@ -141,9 +127,7 @@ section.has-light-background {
   //padding-left: 10px;
   text-indent: -1em;
 }
-.reveal.center, .reveal.center .slides, .reveal.center .slides section {
-  min-height: 100% !important;
-}
+
 
 li:before {
   font-family: 'FontAwesome';
@@ -160,4 +144,10 @@ ul ul li:before {
   margin: 0 auto;
   border: none;
   display:block;
+  box-shadow: none;
+}
+.reveal p img.bottom-left{
+    position: absolute;
+    bottom: 100px;
+    left: 0px;
 }
