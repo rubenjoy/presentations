@@ -249,37 +249,62 @@ OS name: "windows 7", version: "6.1", arch: "amd64", family: "dos"
 
 ---
 
-## Maven Installation
-
-- Verify Prerequisites
-    - JDK 1.4+
-    - JAVA_HOME set to JDK installation root
-- Download Maven
-    - http://maven.apache.org/download.html
-    - Maven 3.3.9
-- Unpack Download
-    - Extract to target installation
+## GroupId
+- A group ID is a universally unique identifier for a project. While this is often just the project name (eg. commons-collections), it is helpful to use a fully-qualified package name to distinguish it from other projects with a similar name (eg. org.apache.maven).
+- groupId will identify your project uniquely across all projects, so we need to enforce a naming schema. It has to follow the package name rules, what means that has to be at least as a domain name you control, and you can create as many subgroups as you want.
 
 ---
 
-- Set Maven Home
-    - Set variable MAVEN_HOME to the installation path
-    - contains bin, boot, conf, and lib directories
-- Add MAVEN_HOME bin directory to execution path
-    - add %MAVEN_HOME%\bin to PATH environment setting
-- Check if maven is already installed
-    - open command line and type 'mvn -version'
-
-![alt text](images/maven-check-version.png "Maven version")
+## ArtifactId
+- An artifact is something that is either produced or used by a project. Examples of artifacts produced by Maven for a project include: JARs, source and binary distributions, WARs. Each artifact is uniquely identified by a group id and an artifact ID which is unique within a group
+- artifactId is the name of the jar without version. If you created it then you can choose whatever name you want with lowercase letters and no strange symbols. If it's a third party jar you have to take the name of the jar as it's distributed. eg. maven, commons-math
 
 ---
 
-# Perform Build Activities
+## Packaging
+- Packaging in maven defines the artifact that will be produced by maven and the "maven package" goal is the one that will compile the code, gather the resources, run the unit tests and build a deployable artefact (JAR, WAR, EAR, etc.)
+- The products of Maven are always written to the "target" directory.
+
+---
+
+## Dependencies
+- Most every project depends upon others to build and run correctly
+- Maven lists all the dependencies of every project and its transitive dependencies, allowing your list to focus solely on the dependencies your project requires.
+
+---
+
+## Dependency Scope
+- This element refers to the classpath of the task at hand (compiling and runtime, testing, etc.) as well as how to limit the transitivity of a dependency. There are five scopes available:
+    - compile
+    - provided
+    - runtime
+    - test
+    - system
+
+---
+
+## Archetype
+- Maven project templating toolkit
+- syntax "mvn archetype:generate"
+- Maven Quickstart archetype
+    - mvn archetype:generate -DarchetypeGroupId=org.apache.maven.archetypes -DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeVersion=5-SNAPSHOT
+
+---
+
+## Maven Phase
 - General build tasks
     - mvn clean
+    - mvn validate
     - mvn compile
-    - mvn test mvn test
+    - mvn test
     - mvn package
+    - mvn verify
     - mvn install
+    - mvn deploy
 - Optionally, specify multiple build tasks
     - mvn clean install
+
+---
+
+![alt text](images/simple-project_lifecyclebinding.png "Maven Phase") <!-- .element: height="500px" -->
+Phase Process
