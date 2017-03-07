@@ -411,6 +411,72 @@ Creating Entity Manager Creating Entity Manager for Java SE Environment
 
 ---
 
+## So Which One Should You Use?
+
+- SINGLE_TABLE or JOIN_TABLE
+
+
+
+---
+
+## SINGLE_TABLE
+
+- Advantages
+  - Offers best performance even for in deep hierarchy since single select may suffice
+- Disadvantages
+  - Changes to members of the hierarchy require column to be altered, added or removed from table
+  
+
+
+
+---
+
+##  JOIN_TABLE
+
+- Advantages
+  - Does not require complex changes to the schema when a single parent class is modified
+  - Works well with shallow hierarchy
+- Disadvantages
+  - Can result in poor performance -- as hierarchy grows, the number of joins required to construct a leaf class also grows
+
+
+---
+
+##  Embedded Objects
+
+
+
+---
+
+##  Embedded Objects
+
+- @Embeddable used to mark an embeddable object
+- Embeddable object is stored as instrinsic part of an owning entity
+  - Doesn't have its own identity
+- Each persistent field/property of embeddable object is mapped to the same database table that represents the owning entity
+
+---
+
+##  Embedded Objects
+
+![Embedded Objects](/images/jpa-img-1.png)
+
+
+
+---
+
+##  Compound Primary Keys
+
+
+---
+
+##  
+
+
+
+---
+
+
 # Java Persistence API (cont.)
 
 - Detached Entities
