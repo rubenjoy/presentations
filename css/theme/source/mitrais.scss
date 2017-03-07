@@ -22,11 +22,11 @@ $backgroundColor: #fff;
 
 $mainColor: #6200C0;
 $headingColor: $mainColor;
-$linkColor: $mainColor;
+$linkColor: lighten( $mainColor, 10% );
 $mainFontSize: 28pt;
 $mainFont: Source Sans Pro, Helvetica, sans-serif;
 $headingFont: Quicksand, Source Sans Pro, Helvetica, sans-serif;
-$linkColorHover: lighten( $linkColor, 40% );
+$linkColorHover: lighten( $linkColor, 35% );
 $selectionBackgroundColor: lighten( $linkColor, 25% );
 
 $heading1Size: 1.6em;
