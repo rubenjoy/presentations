@@ -600,15 +600,147 @@ List customers =
 - All Queries are polymorphic by default
   - That is to say that the FROM clause of a query designates not only instances of the specific entity class to which it explicitly refers but of subclasses as well
 
-    select avg(e.salary) from Employee e where e.salary > 80000
+```sql
+select avg(e.salary) from Employee e where e.salary > 80000
+```
     
 This example returns average salaries of all employees, including subtype of Employee, such as manager.
+
+---
+
+##  Subqueries
+
+```sql
+SELECT DISTINCT emp 
+FROM Employee emp
+WHERE EXISTS (
+  SELECT mgr 
+  FROM Manager mgr 
+  WHERE emp.manager = mgr
+    AND emp.salary > mgr.salary
+)
+```
+
+---
+
+##  Joins
+
+- Adds keyword JOIN in EJB-QL
+- Supports
+  - Inner Joins
+  - Left Joins/Left outer joins
+  - Fetch join
+    - Enables pre-fetching of association data as a side-effect of the query
+    
+```sql
+SELECT DISTINCT c FROM Customer c LEFT JOIN FETCH c.orders WHERE c.address.state = 'MA'
+```
+
+---
+
+##  Projection
+
+```sql
+SELECT e.name, d.name
+FROM Employee e JOIN e.department d
+WHERE e.status = 'FULLTIME'
+```
+
+```sql
+SELECT new com.example.EmployeeInfo(e.id, e.name, e.salary, e.status, d.name)
+FROM Employee e JOIN e.department d
+WHERE e.address.state = 'CA'
+```
+
+---
+
+##  Update, Delete
+
+```sql
+UPDATE Employee e
+SET e.salary = e.salary * 1.1
+WHERE e.department.name = 'Engineering'
+```
+
+
+```sql
+DELETE
+FROM Customer c
+WHERE c.status = ‘inactive’
+  AND c.orders IS EMPTY
+  AND c.balance = 0
+```
+
+---
+
+##  Entity Listeners
 
 
 ---
 
-##  
+##  Entity Listeners
 
+- Listeners or callback methods are designated to receive invocations from persistence provider at various stages of entity lifecycle
+- Callback methods
+  - Annotate callback handling methods right in the entity class or put them in a separate listener class
+  - Annotations
+    - PrePersist/ PostPersist
+    - PreRemove/ PostRemove
+    - PreUpdate / PostUpdate
+    - PostLoad
+        
+---
 
+##  Entity Listeners: Example – 1
 
+```java
+@Entity
+@EntityListener(com.acme.AlertMonitor.class)
+public class AccountBean implements Account {
+  Long accountId;
+  Integer balance;
+  boolean preferred;
+  public Long getAccountId() { ... }
+  public Integer getBalance() { ... }
+  
+  @Transient context
+  public boolean isPreferred() { ... }
+  
+  public void deposit(Integer amount) { ... }
+  public Integer withdraw(Integer amount) throws NSFException {... }
+```
 
+---
+
+##  Entity Listeners: Example – 2
+
+```java
+  @PrePersist
+  public void validateCreate() {
+    if (getBalance() < MIN_REQUIRED_BALANCE)
+      throw new AccountException("Insufficient balance to
+      open an account");
+  }
+  
+  @PostLoad
+  public void adjustPreferredStatus() {
+    preferred =(getBalance() >=
+    AccountManager.getPreferredStatusLevel());
+  }
+}
+
+```
+
+---
+
+##  Entity Listeners: Example – 3
+
+```java
+public class AlertMonitor {
+  @PostPersist
+  public void newAccountAlert(Account acct) {
+    Alerts.sendMarketingInfo(acct.getAccountId(),
+    acct.getBalance());
+  }
+}
+```
