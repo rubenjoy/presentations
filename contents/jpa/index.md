@@ -386,12 +386,325 @@ Creating Entity Manager Creating Entity Manager for Java SE Environment
 
 ---
 
-# Java Persistence API (cont.)
+## Demo Scenarios
 
-- Detached Entities
-- Entity Relationships
-- O/R Mapping
-- Embedded Objects
-- Compound Primary Key
-- Entity Listeners
-- Query
+- There are two stateless beans
+  - EmployeeServiceBean (Calling bean)
+  - AuditServiceBean (Callee bean)
+
+---
+
+## Demo Scenarios (Contd.)
+
+- #1: The createEmployee() method of the EmployeeServiceBean invokes logTransaction() method of the AuditServiceBean
+  - logTransaction() is set with TransactionAttributeType.REQUIRED annotation 
+- #2: The createEmployee2() method of the EmployeeServiceBean invokes logTransaction2() method of the AuditServiceBean
+  - logTransaction2() is set with TransactionAttributeType.REQUIRES_NEW annotation
+
+---
+
+## EmployeeServiceBean (Calling Bean)
+
+```java
+@Stateless
+public class EmployeeServiceBean implements EmployeeService {
+  @PersistenceContext(unitName="EmployeeService")
+  private EntityManager em;
+  @EJB
+  AuditService audit;
+  public void createEmployee(Employee emp) {
+    em.persist(emp);
+    audit.logTransaction(emp.getId(), "created employee");
+  }
+  public void createEmployee2(Employee emp) {
+    em.persist(emp);
+    audit.logTransaction2(emp.getId(), "created employee");
+  }
+}
+```
+
+---
+
+## AuditServiceBean (Callee Bean)
+
+```java
+@Stateless
+public class AuditServiceBean implements AuditService {
+  @PersistenceContext(unitName="EmployeeService")
+  private EntityManager em;
+  @TransactionAttribute(TransactionAttributeType.REQUIRED)//Default
+  public void logTransaction(int empId, String action) {
+    // verify employee number is valid
+    if (em.find(Employee.class, empId) == null) {
+      throw new IllegalArgumentException("Unknown employee id");
+    }
+    LogRecord lr = new LogRecord(empId, action);
+    em.persist(lr);
+  }
+  @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+  public void logTransaction2(int empId, String action) {
+    // ... same code as logTransaction() ...    
+  }
+}
+```
+
+---
+
+## Behind the Scene: Scenario #1
+
+- The createEmployee() method of the EmployeeServiceBean (Calling bean) invokes logTransaction() method of the AuditServiceBean (Callee bean) 
+ - logTransaction() of AuditServiceBean (Bean #2) is set with TransactionAttributeType.REQUIRED annotation
+- The createEmployee() method of Bean #1 starts a new transaction A as default, thus creating a persistence context A
+  - The newly created Employee object A belongs to persistence context A
+
+---
+
+## Behind the Scene: Scenario #1 (Contd.)
+
+- The transaction A and persistence context A of createEmploy() method of Calling bean is propagated to the logTransaction() method of Callee bean
+  - The logTransaction() method has access to Employee object A
+
+---
+
+## Behind the Scene: Scenario #2
+
+- The createEmployee2() method of the EmployeeServiceBean (Calling bean) invokes logTransaction2() method of the AuditServiceBean (Callee bean)
+  - logTransaction2() of AuditServiceBean (Callee bean) is set with TransactionAttributeType.REQUIRES_NEW annotation 
+- The createEmployee2() method of Calling bean starts a new transaction A as default, thus creating a persistence context A
+  - The newly created Employee object A belongs to persistence context A
+
+---
+
+## Behind the Scene: Scenario #2
+
+- The logTransaction2() method of Callee bean creates a new transaction B, thus a new persistence context B
+  - The persistence context B does not have Employee object A
+  - Employee object A still belongs to persistence context A
+  - em.find() will fail
+
+---
+
+## Detached Entities
+
+- Must implement Serializable interface if detached object has to be sent across the wire
+- No need for DTO (Data Transfer Object) anti-design pattern
+- Merge of detached objects can be cascaded  
+
+---
+
+## Transition to Detached Entities
+
+- When a transaction is committed or rollback'ed
+- When an entity is serialized
+
+---
+
+## O/R Mapping
+
+- Comprehensive set of annotations defined for mapping
+  - Relationships
+  - Joins
+  - Database tables and columns
+  - Database sequence generators
+  - Much more
+- Specified using
+  - Annotations within the code
+  - Separate mapping file
+
+---
+
+## Simple Mappings
+
+![alt text](images/table-mapping.png "Table Mapping")
+
+---
+
+## O/R Mapping Example1
+
+```java
+@Entity
+@Table(name="EMPLOYEE", schema="EMPLOYEE_SCHEMA")
+uniqueConstraints={@UniqueConstraint(columnNames={"EMP_ID", "EMP_NAME"})}
+public class EMPLOYEE {
+  ...
+  @Column(name="NAME", nullable=false, length=30)
+  public String getName() { return name; } 
+}
+```
+
+---
+
+## Entity Relationships
+
+- Models association between entities
+- Supports unidirectional as well as bidirectional relationships
+  - Unidirectional relationship: Entity A references B, but B doesn't reference A
+- Cardinalities
+  - One to one
+  - One to many
+  - Many to one
+  - Many to many
+
+---
+
+## Many to Many Example
+
+```java
+@Entity
+public class Project {
+  private Collection<Employee> employees;
+
+  @ManyToMany
+  public Collection<Employee> getEmployees() {
+    return employees;
+  }
+  public void setEmployees(Collection<Employee> employees) {
+    this.employees = employees;
+  }
+... 
+}
+```
+
+---
+
+## Cascading Behavior
+
+- Cascading is used to propagate the effect of an operation to associated entities
+- Cascade=PERSIST
+- Cascade=REMOVE
+- Cascade=MERGE
+- Cascade=REFRESH
+- Cascade=ALL
+
+---
+
+## Entity Inheritance
+
+- Entities can now have inheritance relationship
+  - They are POJO's
+- Three inheritance mapping strategies (mapping entity inheritance to database tables)
+  - Single table
+  - Joined subclass
+  - Table per class
+- Use annotation @Inheritance(..)
+
+---
+
+## Single Table Strategy 
+
+- All the classes in a hierarchy are mapped to a single table
+- Annotation to the parent Entity
+  - @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
+- Root table has a discriminator column whose value identifies the specific subclass to which the instance represented by row belongs
+  - @DiscriminatorColumn(columnDefinition="MYDTYPE")
+
+---
+
+## Single Table Strategy Example
+
+```java
+// Parent Entity
+@Entity
+@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(columnDefinition="MYDTYPE")
+public class Person implements Serializable {...}
+
+// Child Entity
+@Entity
+public class Student extends Person {...}
+
+// Child Entity
+@Entity
+public class Teacher extends Person {...} 
+```
+
+---
+
+## Single Table Strategy Example
+
+![alt text](images/single-table.png "Single Table")
+
+---
+
+## Joined Strategy
+
+- One table for each class in the hierarchy
+  - A parent class is represented by a single common table
+  - Each child class is represented by a separate table that contains fields specific to the child class as well as the columns that represent its primary key(s)
+  - Foreign key relationship exists between parent common table and subclass tables
+- Annotation to the parent Entity
+  - @Inheritance(strategy=InheritanceType.JOINED)
+
+---
+
+## Joined Table Strategy Example
+
+```java
+// Parent Entity
+@Entity @Inheritance(strategy=InheritanceType.JOINED)
+@DiscriminatorColumn(columnDefinition="MYDTYPE")
+public class Person implements Serializable {...} 
+
+// Child Entity
+@Entity
+public class Student extends Person {...}
+
+// Child Entity
+@Entity
+public class Teacher extends Person {...}
+```
+
+---
+
+## Demo #4
+
+- Use different strategies for Use different strategies for inheritance and how database are created
+  - SINGLE_TABLE
+  - JOINED
+
+---
+
+## Demo Scenario
+
+- Person class is parent class
+  - It has name field
+- Student class is a child class of the Person class
+  - It has school and grade fields
+- We will use SINGLE_TABLE strategy first
+  - Create 1 instance of Person class
+  - Create 2 instances of Student class
+  - Observe that a single table has 3 entries 
+
+---
+
+## Demo Scenario (Contd.)
+
+- We will use JOIN_TABLE strategy second
+  - Create 1 instance of Person class
+  - Create 2 instances of Student class
+  - Observe that there are two tables – Person and Student
+
+---
+
+## So Which One Should You Use?
+
+- SINGLE_TABLE or JOIN_TABLE
+
+---
+
+## SINGLE_TABLE
+
+- Advantages
+  - Offers best performance even for in the deep hierarchy since single select may suffice
+- Disadvantages
+  - Changes to members of the hierarchy require column to be altered, added or removed from the table
+
+---
+ 
+ ## JOIN_TABLE
+
+ - Advantages
+  - Does not require complex changes to the schema when a single parent class is modified
+  - Works well with shallow hierarchy
+ - Disadvantages
+  - Can result in poor performance – as hierarchy grows, the number of joins required to construct a leaf class also grows
