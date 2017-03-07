@@ -701,7 +701,7 @@ public class Teacher extends Person {...}
 
 ---
  
- ## JOIN_TABLE
+## JOIN_TABLE
 
  - Advantages
   - Does not require complex changes to the schema when a single parent class is modified
