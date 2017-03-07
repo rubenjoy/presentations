@@ -470,19 +470,145 @@ Creating Entity Manager Creating Entity Manager for Java SE Environment
 
 ---
 
-##  
+##  Compound Primary Keys
+
+- Entity has identifier that is composed of multiple fields
+- The primary key of the tables is made of multiple columns
+- Primary key class needs to be defined
+  - Has to be _Serializable_ type
+- Primary key class can be one of two types
+  - Embeddable class annotated with @Embeddable
+  - Id class annotated with @IdClass
+
+---
+
+##  @Embeddable and @EmbeddedId Example
+
+```java
+@Entity
+public class Employee {
+  // Employee is @Embeddable tyoe
+  @EmbeddedId private EmployeeId id;
+  
+  private String name;
+  private Long salary;
+  
+  // more code
+}
+```
+
+---
+
+##  Query
 
 
 
 ---
 
+##  EJB-QL Enhancements
 
-# Java Persistence API (cont.)
+- Support for dynamic queries in addition to named queries or static queries
+- Polymorphic queries
+- Bulk update and delete operations
+- Joins
+- Group By / Having
+- Subqueries
+- Additional SQL functions
+  - UPPER, LOWER, TRIM, CURRENT_DATE, ...
 
-- Detached Entities
-- Entity Relationships
-- O/R Mapping
-- Embedded Objects
-- Compound Primary Key
-- Entity Listeners
-- Query
+---
+
+##  Queries
+
+- Static queries
+  - Defined with Java language metadata or XML
+    - Annotations: @NamedQuery, @NamedNativeQuery
+- Dynamic queries
+  - Query string is specified at runtime
+- Use Java Persistence query language or SQL
+- Named or positional parameters
+- Entity Manager is factory for Query objects
+  - createNamedQuery, createQuery, createNativeQuery
+- Query methods for controlling max results, pagination, flush mode
+
+---
+
+##  Dynamic Queries
+
+```java
+// Build and execute queries dynamically at runtime.
+
+public List findWithName(String name) {
+  return em.createQuery(
+    "SELECT c FROM Customer c" + 
+    "WHERE c.name LIKE :custName")
+    .setParameter("custName", name)
+    .setMaxResults(10)
+    .getResultList();
+}
+```
+
+---
+
+##  Static Query
+
+```java
+@NamedQuery(name="customerFindByZipcode", 
+  query=
+  "SELECT c FROM Customer c WHERE
+  c.address.zipcode = :zip")
+
+@Entity public class Customer { ... }
+
+...
+
+public List findCustomerByZipCode(int zipcode) {
+  return em.createNamedQuery("customerFindByZipCode")
+        .setParameter("zip", zipcode)
+        .setMaxResults(20)
+        .getResultList();
+}
+  
+```
+
+---
+
+##  Named Queries
+
+```java
+// Named queries are a useful way to create reusable queries
+
+@NamedQuery(
+  name="findCustomersByName",
+  queryString="SELECT c FROM Customer c " +
+              "WHERE c.name LIKE :custname"
+)
+
+@PersistenceContext public EntityManager em;
+
+List customers = 
+  em.createNamedQuery("findCustomersByName")
+  .setParameter("custName, "Smith")
+  .getResultList(); 
+
+```
+
+---
+
+##  Polymorphic Queries
+
+- All Queries are polymorphic by default
+  - That is to say that the FROM clause of a query designates not only instances of the specific entity class to which it explicitly refers but of subclasses as well
+
+    select avg(e.salary) from Employee e where e.salary > 80000
+    
+This example returns average salaries of all employees, including subtype of Employee, such as manager.
+
+
+---
+
+##  
+
+
+
+
