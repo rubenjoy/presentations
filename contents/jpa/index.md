@@ -459,7 +459,7 @@ Creating Entity Manager Creating Entity Manager for Java SE Environment
 
 ##  Embedded Objects
 
-![Embedded Objects](/images/jpa-img-1.png)
+![Embedded Objects](images/jpa-img-1.png)
 
 
 
