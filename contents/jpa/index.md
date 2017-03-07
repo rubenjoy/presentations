@@ -709,3 +709,306 @@ public class Teacher extends Person {...}
   - Works well with shallow hierarchy
  - Disadvantages
   - Can result in poor performance – as hierarchy grows, the number of joins required to construct a leaf class also grows
+
+---
+
+##  Embedded Objects
+
+---
+
+##  Embedded Objects
+
+- @Embeddable used to mark an embeddable object
+- Embeddable object is stored as instrinsic part of an owning entity
+  - Doesn't have its own identity
+- Each persistent field/property of embeddable object is mapped to the same database table that represents the owning entity
+
+---
+
+##  Embedded Objects
+
+![Embedded Objects](images/jpa-img-1.png)
+
+
+
+---
+
+##  Compound Primary Keys
+
+
+---
+
+##  Compound Primary Keys
+
+- Entity has identifier that is composed of multiple fields
+- The primary key of the tables is made of multiple columns
+- Primary key class needs to be defined
+  - Has to be _Serializable_ type
+- Primary key class can be one of two types
+  - Embeddable class annotated with @Embeddable
+  - Id class annotated with @IdClass
+
+---
+
+##  @Embeddable and @EmbeddedId Example
+
+```java
+@Entity
+public class Employee {
+  // Employee is @Embeddable tyoe
+  @EmbeddedId private EmployeeId id;
+  
+  private String name;
+  private Long salary;
+  
+  // more code
+}
+```
+
+---
+
+##  Query
+
+
+
+---
+
+##  EJB-QL Enhancements
+
+- Support for dynamic queries in addition to named queries or static queries
+- Polymorphic queries
+- Bulk update and delete operations
+- Joins
+- Group By / Having
+- Subqueries
+- Additional SQL functions
+  - UPPER, LOWER, TRIM, CURRENT_DATE, ...
+
+---
+
+##  Queries
+
+- Static queries
+  - Defined with Java language metadata or XML
+    - Annotations: @NamedQuery, @NamedNativeQuery
+- Dynamic queries
+  - Query string is specified at runtime
+- Use Java Persistence query language or SQL
+- Named or positional parameters
+- Entity Manager is factory for Query objects
+  - createNamedQuery, createQuery, createNativeQuery
+- Query methods for controlling max results, pagination, flush mode
+
+---
+
+##  Dynamic Queries
+
+```java
+// Build and execute queries dynamically at runtime.
+
+public List findWithName(String name) {
+  return em.createQuery(
+    "SELECT c FROM Customer c" + 
+    "WHERE c.name LIKE :custName")
+    .setParameter("custName", name)
+    .setMaxResults(10)
+    .getResultList();
+}
+```
+
+---
+
+##  Static Query
+
+```java
+@NamedQuery(name="customerFindByZipcode", 
+  query=
+  "SELECT c FROM Customer c WHERE
+  c.address.zipcode = :zip")
+
+@Entity public class Customer { ... }
+
+...
+
+public List findCustomerByZipCode(int zipcode) {
+  return em.createNamedQuery("customerFindByZipCode")
+        .setParameter("zip", zipcode)
+        .setMaxResults(20)
+        .getResultList();
+}
+  
+```
+
+---
+
+##  Named Queries
+
+```java
+// Named queries are a useful way to create reusable queries
+
+@NamedQuery(
+  name="findCustomersByName",
+  queryString="SELECT c FROM Customer c " +
+              "WHERE c.name LIKE :custname"
+)
+
+@PersistenceContext public EntityManager em;
+
+List customers = 
+  em.createNamedQuery("findCustomersByName")
+  .setParameter("custName, "Smith")
+  .getResultList(); 
+
+```
+
+---
+
+##  Polymorphic Queries
+
+- All Queries are polymorphic by default
+  - That is to say that the FROM clause of a query designates not only instances of the specific entity class to which it explicitly refers but of subclasses as well
+
+```sql
+select avg(e.salary) from Employee e where e.salary > 80000
+```
+    
+This example returns average salaries of all employees, including subtype of Employee, such as manager.
+
+---
+
+##  Subqueries
+
+```sql
+SELECT DISTINCT emp 
+FROM Employee emp
+WHERE EXISTS (
+  SELECT mgr 
+  FROM Manager mgr 
+  WHERE emp.manager = mgr
+    AND emp.salary > mgr.salary
+)
+```
+
+---
+
+##  Joins
+
+- Adds keyword JOIN in EJB-QL
+- Supports
+  - Inner Joins
+  - Left Joins/Left outer joins
+  - Fetch join
+    - Enables pre-fetching of association data as a side-effect of the query
+    
+```sql
+SELECT DISTINCT c FROM Customer c LEFT JOIN FETCH c.orders WHERE c.address.state = 'MA'
+```
+
+---
+
+##  Projection
+
+```sql
+SELECT e.name, d.name
+FROM Employee e JOIN e.department d
+WHERE e.status = 'FULLTIME'
+```
+
+```sql
+SELECT new com.example.EmployeeInfo(e.id, e.name, e.salary, e.status, d.name)
+FROM Employee e JOIN e.department d
+WHERE e.address.state = 'CA'
+```
+
+---
+
+##  Update, Delete
+
+```sql
+UPDATE Employee e
+SET e.salary = e.salary * 1.1
+WHERE e.department.name = 'Engineering'
+```
+
+
+```sql
+DELETE
+FROM Customer c
+WHERE c.status = ‘inactive’
+  AND c.orders IS EMPTY
+  AND c.balance = 0
+```
+
+---
+
+##  Entity Listeners
+
+
+---
+
+##  Entity Listeners
+
+- Listeners or callback methods are designated to receive invocations from persistence provider at various stages of entity lifecycle
+- Callback methods
+  - Annotate callback handling methods right in the entity class or put them in a separate listener class
+  - Annotations
+    - PrePersist/ PostPersist
+    - PreRemove/ PostRemove
+    - PreUpdate / PostUpdate
+    - PostLoad
+        
+---
+
+##  Entity Listeners: Example – 1
+
+```java
+@Entity
+@EntityListener(com.acme.AlertMonitor.class)
+public class AccountBean implements Account {
+  Long accountId;
+  Integer balance;
+  boolean preferred;
+  public Long getAccountId() { ... }
+  public Integer getBalance() { ... }
+  
+  @Transient context
+  public boolean isPreferred() { ... }
+  
+  public void deposit(Integer amount) { ... }
+  public Integer withdraw(Integer amount) throws NSFException {... }
+```
+
+---
+
+##  Entity Listeners: Example – 2
+
+```java
+  @PrePersist
+  public void validateCreate() {
+    if (getBalance() < MIN_REQUIRED_BALANCE)
+      throw new AccountException("Insufficient balance to
+      open an account");
+  }
+  
+  @PostLoad
+  public void adjustPreferredStatus() {
+    preferred =(getBalance() >=
+    AccountManager.getPreferredStatusLevel());
+  }
+}
+
+```
+
+---
+
+##  Entity Listeners: Example – 3
+
+```java
+public class AlertMonitor {
+  @PostPersist
+  public void newAccountAlert(Account acct) {
+    Alerts.sendMarketingInfo(acct.getAccountId(),
+    acct.getBalance());
+  }
+}
+```
