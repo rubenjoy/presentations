@@ -386,6 +386,31 @@ Creating Entity Manager Creating Entity Manager for Java SE Environment
 
 ---
 
+## Demo #4
+
+ Use different strategies for inheritance and how database tables are created:   
+ - SINGLE_TABLE   
+ - JOINED
+
+---
+
+## Demo Scenario
+
+- Person class is parent class
+  - It has _name_ field
+- Student class is a child class of the Person class
+  - It has _school_ and _grade_ fields
+- We will use SINGLE_TABLE strategy first
+  - Create 1 instance of Person class
+  - Create 2 instances of Student class
+  - Observe that a single table has 3 entries
+- We will use JOIN_TABLE strategy second
+  - Create 1 instance of Person class
+  - Create 2 instances of Student class
+  - Observe that there are two tables - Person and Student
+
+---
+
 # Java Persistence API (cont.)
 
 - Detached Entities
