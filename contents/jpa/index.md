@@ -179,7 +179,8 @@ public class OrderEntry {
     //Use find method to locate customer entity
     Customer c = em.find(Customer.class, custID);
     // Add a new order to the Orders
-    c.getOrders().add(newOrder);  newOrder.setCustomer(c);  
+    c.getOrders().add(newOrder);
+    newOrder.setCustomer(c);  
   }
   // other business methods
 }
