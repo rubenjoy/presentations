@@ -22,11 +22,11 @@ $backgroundColor: #fff;
 
 $mainColor: #6200C0;
 $headingColor: $mainColor;
-
+$linkColor: $mainColor;
 $mainFontSize: 28pt;
 $mainFont: Source Sans Pro, Helvetica, sans-serif;
 $headingFont: Quicksand, Source Sans Pro, Helvetica, sans-serif;
-$linkColorHover: lighten( $linkColor, 15% );
+$linkColorHover: lighten( $linkColor, 40% );
 $selectionBackgroundColor: lighten( $linkColor, 25% );
 
 $heading1Size: 1.6em;
@@ -150,4 +150,10 @@ ul ul li:before {
     position: absolute;
     bottom: 100px;
     left: 0px;
+}
+#presentable-toc{
+    height: 500px;
+}
+#presentable-toc ol, #reveal #presentable-toc ol {
+    margin: 0 0 0 1em;
 }
