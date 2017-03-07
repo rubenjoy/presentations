@@ -1,14 +1,21 @@
+<!-- .slide: data-state="main" data-background="../../images/master.png" data-background-size="contain" -->
+# Maven For Java Web Development <!-- .element: style="text-align: center;font-size: 2em;" -->
+
+---
+
 # Build System
+
+---
 
 ## Conventions
 
-- Variables ${Key}
-- Home Directory ${HOME}
-    - Linux: $HOME or ~
-    - Windows: %HOMEPATH%
-- Path Separator /
-    - Linux - "/"
-    - Windows - "\"
+- Variables `${Key}`
+- Home Directory `${HOME}`
+    - Linux: `$HOME` or `~`
+    - Windows: `%HOMEPATH%`
+- Path Separator `/`
+    - Linux - `/`
+    - Windows - `\`
 
 ---
 
@@ -48,22 +55,23 @@
 
 ---
 
+## Maven Architecture...
+
 - Local repository cache
     - Plugin downloads
     - Direct and transitive dependencies
-    - Defaults to ${HOME}/.m2/repository
-        - Edit settings.xml for alternatives
-        - <settings><localRepository/></settings>
+    - Defaults to `${HOME}/.m2/repository`
+       - Edit `settings.xml` for alternatives
+       - `<settings><localRepository/></settings>`
 
 ---
 
 ## Client Personalization
 
 - Global
-    - Maven installation root
-        - conf/settings.xml
+    - Maven installation root `conf/settings.xml`
 - User
-    - ${HOME}/.m2/settings.xml
+    - `${HOME}/.m2/settings.xml`
 
 ---
 
@@ -80,11 +88,13 @@
 
 ---
 
+## Maven Installation Process...
+
 - Set Maven Home
-    - set variable M2_HOME to the installation path
+    - set variable `M2_HOME` to the installation path
         - contains bin, boot, conf, and lib directories
 - Add M2_HOME bin directory to execution path
-    - Add ${M2_HOME}/bin to PATH environment setting
+    - Add `${M2_HOME}/bin` to PATH environment setting
 - Verify repository settings
     - Official, mirror, or corporate
 
@@ -93,8 +103,7 @@
 ## Verify Repository Settings
 
 - Default
-    - Official repository : a.k.a central
-        - http://repo1.maven.org/maven2
+    - Official repository : a.k.a central: http://repo1.maven.org/maven2
 - Mirror
     - Traditional Mirror
         - redundant site
@@ -123,6 +132,8 @@
 
 # Build Process
 
+---
+
 ## General Approach
 
 - Compile source
@@ -144,6 +155,8 @@
 
 ---
 
+## Process...
+
 - Create project/pom.xml
     - Register Maven 2 NS
     - Define project meta-data
@@ -154,6 +167,8 @@
         - Local projects
 
 ---
+
+## Process...
 
 - Integrate with IDE
     - Prepare for eclipse "mvn eclipse:eclipse"
