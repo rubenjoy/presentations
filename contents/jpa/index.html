@@ -4,10 +4,10 @@
 	<head>
 		<meta charset="utf-8">
 
-		<title>Java Programming</title>
+		<title>Java Persistence API</title>
 
-		<meta name="description" content="Java programming training material">
-		<meta name="author" content="Kustian">
+		<meta name="description" content="Java Persistence API training material">
+		<meta name="author" content="Ruben, Angela">
 
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -34,17 +34,20 @@
 	</head>
 
 	<body>
-		<!-- Slides footer -->
-		<div class="footer">
-			<div class="left">www.mitrais.com</div>
-			<div class="right">continuous commitment</div>
-		</div>
 		<div class="reveal">
-			
+			<!-- Slides footer -->
+			<div class="footer">
+				<div class="left">www.mitrais.com</div>
+				<div class="right">continuous commitment</div>
+			</div>
 			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
-				<!-- Main slide for presentation title -->
-				<section data-markdown="index.md" />
+				<section data-markdown="title.md">
+
+				</section>
+				<section data-markdown="index.md" data-separator="^---$" data-separator-vertical="^--$" data-separator-notes="^Note:">
+
+				</section>
 			</div>
 
 		</div>
@@ -57,13 +60,12 @@
 			// Full list of configuration options available at:
 			// https://github.com/hakimel/reveal.js#configuration
 			Reveal.initialize({
-                width: '100%',
 				controls: true,
 				progress: true,
 				history: true,
 				center: true,
 
-				transition: 'default', // none/fade/slide/convex/concave/zoom
+				transition: 'zoom', // none/fade/slide/convex/concave/zoom
 
 				// Optional reveal.js plugins
 				dependencies: [
