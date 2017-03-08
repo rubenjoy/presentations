@@ -361,7 +361,7 @@ body {
 .reveal code {
   font-family: Source Code Pro; }
 
-.reveal ul, .reveal ul ul {
+.reveal ul, .reveal ul ul, .reveal ul ul ul {
   list-style: none;
   width: 100%; }
 
@@ -376,6 +376,11 @@ li:before {
 ul ul li:before {
   font-family: 'FontAwesome';
   content: '\f192';
+  margin: 0 15px 0 -15px; }
+
+ul ul ul li:before {
+  font-family: 'FontAwesome';
+  content: '\f10c';
   margin: 0 15px 0 -15px; }
 
 .reveal section img {
