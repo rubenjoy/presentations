@@ -22,7 +22,7 @@ $backgroundColor: #fff;
 
 $mainColor: #6200C0;
 $headingColor: $mainColor;
-$linkColor: lighten( $mainColor, 25% );
+$linkColor: #FF6600;
 $mainFontSize: 28pt;
 $mainFont: Source Sans Pro, Helvetica, sans-serif;
 $headingFont: Quicksand, Source Sans Pro, Helvetica, sans-serif;
@@ -163,4 +163,8 @@ ul ul ul li:before {
 }
 #presentable-toc ol, #reveal #presentable-toc ol {
     margin: 0 0 0 1em;
+}
+
+h2.toc{
+    color: $linkColor;
 }
