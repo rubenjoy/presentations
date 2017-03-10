@@ -1,7 +1,3 @@
-# Java Persistence API
-
----
-
 ## Agenda
 
 - Java Persistence Requirements (Basic)
@@ -13,7 +9,7 @@
 
 ---
 
-## Agenda (contd.)
+### Agenda (contd.)
 
 - Detached Entities
 - Entity Relationships
@@ -258,7 +254,7 @@ public OrderLine updateOrderLine(OrderLine orderLine) {
 
 ---
 
-## Demo #1
+### Demo #1
 
 - Creating Entities from Existing Database tables
 - Performing CRUD (Create, Read, Update, Delete) operations against    Entities 
@@ -381,7 +377,7 @@ Creating Entity Manager Creating Entity Manager for Java SE Environment
 
 ---
 
-## Demo #3
+### Demo #3
 
  Use two different transaction attributes and see how persistence context is propagated.
 
@@ -657,7 +653,7 @@ public class Teacher extends Person {...}
 
 ---
 
-## Demo #4
+### Demo #4
 
 - Use different strategies for Use different strategies for inheritance and how database are created
   - SINGLE_TABLE
@@ -938,11 +934,6 @@ WHERE c.status = ‘inactive’
   AND c.orders IS EMPTY
   AND c.balance = 0
 ```
-
----
-
-##  Entity Listeners
-
 
 ---
 
