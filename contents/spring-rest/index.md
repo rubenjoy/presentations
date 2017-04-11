@@ -2,7 +2,7 @@
 
 - REST
 - RESTful Web Service
-- RESTful Web Service with Spring REST
+- RESTful Web Service with Spring
 
 ---
 
@@ -90,10 +90,289 @@ adding duplicate entry
 
 ---
 
-## RESTful Web Service with Spring REST
+## RESTful Web Service with Spring Data REST
 
-- Spring REST overview
-- Revisit Repository
-- REST Controller
-- Service
+- Resource: Domain objects or model
+- Message construction: Repository and/or Controller (and Service)
 
+---
+
+## Domain objects or model
+
+- POJO representation of domain
+- Can be a simple POJO class or database entity
+- Example:
+
+```java
+package hello;
+
+public class Greeting {
+
+    private final long id;
+    private final String content;
+
+    public Greeting(long id, String content) {
+        this.id = id;
+        this.content = content;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public String getContent() {
+        return content;
+    }
+}
+```
+Which will be returned as JSON Object in Response body:
+```json
+{
+    "id": 1,
+    "content": "Hello, World!"
+}
+```
+
+---
+
+## Entity or domain model (Contd.)
+
+```java
+@Entity
+@Table(name="employee")
+public class Employee {
+    @Id
+    @Column(name="emp_id")
+    @GeneratedValue(strategy= GenerationType.AUTO)
+    private long empId;
+    @Column(name="first_name", nullable = false)
+    private String firstName;
+    @Column(name="last_name", nullable = false)
+    private String lastName;
+    @Column(name="gender", nullable = false)
+    private Gender gender;
+    @Column(name="dob")
+    private Date dob;
+}
+```
+Which will be returned as JSON Object in Response body:
+```json
+{
+  "empId": 502,
+  "firstName": "Cal",
+  "lastName": "Supreme",
+  "gender": "Male",
+  "dob": "1989-03-09"
+  }
+```
+
+*Look up JPA for more explanation about defining Entity*
+
+---
+
+## Repository
+
+- A mechanism for encapsulating storage, retrieval, and search behavior which emulates a collection of objects
+- Repository Type
+  - CRUD Repository
+  - PagingAndSortingRepository
+    - CRUD Repository + paging and sorting capability   
+  - Persistence technology-specific abstractions
+    - ex: JpaRepository or MongoRepository
+
+---
+
+## Repository resources
+
+- Fundamentals  
+- The collection resource
+- The item resource
+- The association resource
+- The search resource
+- The query method resource
+
+---
+
+## Fundamentals
+
+```java
+public interface EmployeeRepository extends PagingAndSortingRepository<Employee,Long> {
+    
+}
+```
+
+- Exposes a collection resource at /employees
+- Exposes an item resource for each of the items managed by the repository under the URI template /employees/{id}
+- Default status codes:
+  - 200 OK - for plain GET requests
+  - 201 Created - for POST and PUT requests that create new resources
+  - 204 No Content - for PUT, PATCH, and DELETE
+- Resource discoverability
+  - Spring Data REST uses HAL to render responses
+  - HAL defines links to be contained in a property of the returned document
+  - ex: GET http://localhost:8080 will return
+```json
+{
+  "_links": {
+    "employees": {
+      "href": "http://localhost:8080/employees{?page,size,sort}",
+      "templated": true
+    }
+  }
+}
+```
+
+---
+
+## The collection resource
+
+- Spring Data REST exposes a collection resource named after the uncapitalized, pluralized version of the domain class the exported repository is handling
+- Supported HTTP Methods:
+  - GET - Returns all entities the repository servers through its findAll(…) method
+  - HEAD - Returns whether the collection resource is available
+  - POST - Creates a new entity from the given request body
+- Example:
+GET http://localhost:8080/employees will return
+```json
+{
+  "_embedded": {
+    "employees": [
+      {
+        "empId": 502,
+        "firstName": "Cal",
+        "lastName": "Supreme",
+        "gender": "Male",
+        "dob": "1989-03-09",
+        "_links": {
+          "self": {
+            "href": "http://localhost:8080/employees/502"
+          },
+          "employee": {
+            "href": "http://localhost:8080/employees/502"
+          }
+        }
+      },
+      ...
+    ]
+  },
+  "_links": {
+    "self": {
+      "href": "http://localhost:8080/employees"
+    },
+    "profile": {
+      "href": "http://localhost:8080/profile/employees"
+    }
+  },
+  "page": {
+    "size": 20,
+    "totalElements": 3,
+    "totalPages": 1,
+    "number": 0
+  }
+}
+```
+
+---
+
+## The item resource
+
+- Spring Data REST exposes a resource for individual collection items as sub-resources of the collection resource
+- Supported HTTP methods
+  - GET - Returns a single entity
+  - HEAD - Returns whether the item resource is available
+  - PUT - Replaces the state of the target resource with the supplied request body
+  - PATCH - Similar to PUT but partially updating the resources state
+  - DELETE - Deletes the resource exposed
+- Example:
+GET http://localhost:8080/employees/502 will return
+```json
+{
+  "empId": 502,
+  "firstName": "Cal",
+  "lastName": "Supreme",
+  "gender": "Male",
+  "dob": "1989-03-09"
+  }
+```
+
+---
+
+## The association resource
+
+- Spring Data REST exposes sub-resources of every item resource for each of the associations the item resource has
+- Supported HTTP methods
+  - GET - Returns the state of the association resource
+  - PUT - Binds the resource pointed to by the given URI(s) to the resource
+  - POST - Only supported for collection associations. Adds a new element to the collection
+  - DELETE - Unbinds the association
+- Example: TODO
+
+---
+
+## The search resource
+
+- The search resource returns links for all query methods exposed by a repository
+- The path and name of the query method resources can be modified using @RestResource on the method declaration
+- Supported HTTP methods
+  - GET - Returns a list of links pointing to the individual query method resources
+  - HEAD - Returns whether the search resource is available. A 404 return code indicates no query method resources available at all
+- Example:
+GET http://localhost:8080/employees/search will return
+ ```json
+{
+  "_links": {
+    "findByName": {
+      "href": "http://localhost:8080/employees/search/findByName{?name,page,size,sort}",
+      "templated": true
+    },
+    "self": {
+      "href": "http://localhost:8080/employees/search"
+    }
+  }
+}
+ ```
+ ---
+ 
+ ## The query method resource
+ 
+ - The query method resource executes the query exposed through an individual query method on the repository interface
+ - Supported HTTP methods
+   - GET - Returns the result of the query execution
+   - HEAD - Returns whether a query method resource is available
+ - Example:
+ GET http://localhost:8080/employees/search/findByName?name=cal will return
+ ```json
+ {
+   "_embedded": {
+     "employees": [
+       {
+         "empId": 502,
+         "firstName": "Cal",
+         "lastName": "Supreme",
+         "gender": "Male",
+         "dob": "1989-03-09",
+         "_links": {
+           "self": {
+             "href": "http://localhost:8080/employees/502"
+           },
+           "employee": {
+             "href": "http://localhost:8080/employees/502"
+           }
+         }
+       }
+     ]
+   },
+   "_links": {
+     "self": {
+       "href": "http://localhost:8080/employees/search/findByName?name=cal"
+     }
+   },
+   "page": {
+     "size": 20,
+     "totalElements": 1,
+     "totalPages": 1,
+     "number": 0
+   }
+ }
+```
+ 
