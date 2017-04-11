@@ -22,7 +22,7 @@ $backgroundColor: #fff;
 
 $mainColor: #6200C0;
 $headingColor: $mainColor;
-$linkColor: lighten( $mainColor, 25% );
+$linkColor: #FF6600;
 $mainFontSize: 28pt;
 $mainFont: Source Sans Pro, Helvetica, sans-serif;
 $headingFont: Quicksand, Source Sans Pro, Helvetica, sans-serif;
@@ -119,7 +119,7 @@ $heading4Size: 1.0em;
   }
 
 }
-.reveal ul, .reveal ul ul {
+.reveal ul, .reveal ul ul, .reveal ul ul ul {
   list-style: none;
   width: 100%;
 }
@@ -140,6 +140,13 @@ ul ul li:before {
   content: '\f192';
   margin:0 15px 0 -15px;
 }
+
+ul ul ul li:before {
+  font-family: 'FontAwesome';
+  content: '\f10c';
+  margin:0 15px 0 -15px;
+}
+
 .reveal section img{
   margin: 0 auto;
   border: none;
@@ -156,4 +163,8 @@ ul ul li:before {
 }
 #presentable-toc ol, #reveal #presentable-toc ol {
     margin: 0 0 0 1em;
+}
+
+h2.toc{
+    color: $linkColor;
 }
