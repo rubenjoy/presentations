@@ -144,8 +144,16 @@ Which will be returned as JSON Object in Response body:
 
 ---
 
-## Entity or domain model (Contd.)
+## Entity
 
+- Java representation for database relations
+- @Entity - annotate a class as Entity
+- @Table - define database table name
+- @Id - define table Id
+- @Column - define column name for field
+- @OneToMany - define relations one to many between entity
+
+Example:
 ```java
 @Entity
 @Table(name="employee")
@@ -159,23 +167,13 @@ public class Employee {
     @Column(name="last_name", nullable = false)
     private String lastName;
     @Column(name="gender", nullable = false)
-    private Gender gender;
+    private String gender;
     @Column(name="dob")
     private Date dob;
+    @OneToMany(mappedBy="employee", cascade = CascadeType.ALL)
+    private Set<OfficeLocation> officeLocations;
 }
 ```
-Which will be returned as JSON Object in Response body:
-```json
-{
-  "empId": 502,
-  "firstName": "Cal",
-  "lastName": "Supreme",
-  "gender": "Male",
-  "dob": "1989-03-09"
-  }
-```
-
-*Look up JPA for more explanation about defining Entity*
 
 ---
 
@@ -188,6 +186,21 @@ Which will be returned as JSON Object in Response body:
     - CRUD Repository + paging and sorting capability   
   - Persistence technology-specific abstractions
     - ex: JpaRepository or MongoRepository
+
+---
+
+## CRUD Repository
+
+- Provides sophisticated CRUD functionality for the entity class that is being managed
+
+![alt text](images/crudrepository.png "CRUD Repository")
+
+1. Saves the given entity
+2. Returns the entity identified by the given id
+3. Returns all entities
+4. Returns the number of entities
+5. Deletes the given entity
+6. Indicates whether an entity with the given id exists
 
 ---
 
@@ -263,8 +276,8 @@ GET http://localhost:8080/employees will return
              "href": "http://localhost:8080/employees/502/officeLocations"
            }
         }
-      },
-      ...
+      }//,
+      // ...
     ]
   },
   "_links": {
@@ -461,6 +474,8 @@ public class EmployeeController {
 ---
 
 ## Exercise
+
+TODO
 
 ---
 
