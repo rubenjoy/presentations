@@ -5,12 +5,11 @@
 - Able to create Hello World Webapp in Spring
 - Know what MVC pattern is
 - Able to implement Web Controller in Spring
-    + using Spring Boot
-    + Spring Annotation not xml config
+    + using Spring Boot, annotation over xml config
     + @Controller, @RequestMapping, @RequestParam, @RequestBody
+- Able to write simple JSP view
 - Able to write Unit Test for Spring application
     + standalone setup without injecting web context
-- Able to write simple JSP view
 
 ---
 
@@ -168,26 +167,26 @@ public class App {
 }
 ```
 
-Validate it with call spring maven plugin.
+Validate it with calling spring maven plugin.
 
 ![Spring Boot Run](images/spring-boot-run.png)
 
 ---
 
-### Hello World in Spring (contd)
+### Hello World in Spring (contd.)
 
 - `SpringApplication.run` will launch our application
 - `@SpringBootApplication` is a convenience annotation that adds:
-    + @Configuration tags the class as configuration class
-    + @EnableAutoConfiguration tell Spring Boot to add beans automatically
-    + @EnableWebMvc flags the application as a webapp
+    + `@Configuration` tags the class as configuration class
+    + `@EnableAutoConfiguration` tell Spring Boot to add beans automatically
+    + `@EnableWebMvc` flags the application as a webapp
     + `@ComponentScan` look for other components, configurations and services
 
 ---
 
 ### Create Bean
 
-Bean that retrieve all created beans
+- Bean that retrieve all created beans
 
 ```java
 public class App {
@@ -204,13 +203,13 @@ public class App {
 }
 ```
 
-Validate after call spring maven plugin, we should see app as bean name.
+- Call the spring maven plugin again, and we should see `app` as bean name.
 
 ---
 
-### Short Intro @Bean
+### Very Short Intro Bean
 
-TODO
+A Spring IoC container manages one or more beans. These beans are created with the configuration metadata that you supply to the container.
 
 ---
 
@@ -238,7 +237,6 @@ public class HelloWorld {
 
 ---
 
-
 ### HelloWorld Injection
 
 ```java
@@ -254,13 +252,26 @@ public class App {
 }
 ```
 
-Validate it again, and make sure we see "hello component".
+- Now we see "hello component", after calling spring maven plugin.
 
 ---
 
-### Hello World Webapp in Spring
+## Why Spring Boot?
 
-Create our first Controller.
+- Some answer from Mitrais fellows:
+    + Spring Boot is now, and vanilla Spring was now.
+    + Spring Boot is just Spring with extra magic.
+    + Spring Boot is automatic Spring.
+- Benefits of Spring Boot:
+    + Spring Boot provides the necessary configuration, just focus on the business logic.
+    + Spring Boot is flexible too, just override or extend Spring Boot provided configuration to match the requirements.
+    + Single point of dependency, e.g.: spring-boot-starter-web, and it will implicitly selecting dozens required dependencies.
+
+---
+
+## Hello World Webapp in Spring
+
+- Create our first Controller.
 
 ```java
 @Controller
@@ -274,7 +285,7 @@ public class HelloController() {
 }
 ```
 
-Re-run our Spring Application, and open http://localhost:8080/hello
+- Re-run our Spring Application, and open http://localhost:8080/hello
 
 ---
 
@@ -290,7 +301,7 @@ Re-run our Spring Application, and open http://localhost:8080/hello
 
 ---
 
-### Request Workflow (contd)
+### Request Workflow (contd.)
 
 - Front Controller/ Dispatcher Servlet receive HTTP request.
 - Dispatcher consult handler mapping to call appropriate controller.
@@ -303,9 +314,9 @@ Re-run our Spring Application, and open http://localhost:8080/hello
 ## Controller in Spring
 
 - Put `@Controller` or `@RestController` on a class
-    + Those annotations flag the following class is controller component, that automatically injected into the container.
+    + Those annotations flag the following class as controller component, that automatically injected into the container.
     + `@RestController` annotates the class with `@Controller` and `@ResponseBody`.
-- `@ResponseBody` wraps the method's return in HTTP response.
+- `@ResponseBody` wraps the method's return value with HTTP response.
 
 ---
 
@@ -327,15 +338,16 @@ Re-run our Spring Application, and open http://localhost:8080/hello
     + `hello(String message)`
 - To inject parameter from GET query string, use @RequestParam
     + URI path: `localhost/hello?message=Hello%20World`
-    + Method signature: `hello(@RequestParam String message)`, given aforementioned URI path. message value is `"Hello World"`
+    + Method signature: `hello(@RequestParam String message)`
+    + Given aforementioned URI path, message value is `"Hello World"`
 
 ---
 
-### Request Parameters (contd)
+### Request Parameters (contd.)
 
 - `@RequestParam` has optional element:
     + name: the request parameter to bind to
-    + defaultvalue: when value missing, this value is injected.
+    + defaultvalue: when value missing, "Hello Spring" is injected.
 
 ```java
 public String hello(
@@ -363,7 +375,7 @@ public String hello(@RequestBody String message) {
 
 ### URI Path Pattern
 
-- Spring can inject from URI path variable also.
+- Spring also can inject from URI path variable.
 
 ```java
 @RequestMapping(value = "/{message}")
@@ -378,14 +390,14 @@ public String hello(@PathVariable String message) {
 
 ---
 
-### Hands on coding
+### Hands-on Labs
 
-- Please create 3 controllers that:
-    + mapping URI `'host/employees?gender=male'`
-        + hint: @RequestMapping GET, @RequestParam
-    + mapping URI `'host/employeees'`, with request method POST and request body
-        + hint: @RequestMapping POST, @RequestBody
-    + mapping URI `'host/employees/{id}'`, with request method PUT and request body
+- Please create controllers that
+    + mapping URI `host/hello?message=HELLO`, with GET request method
+        * hint: @RequestMapping GET, @RequestParam
+    + mapping URI `host/hello`, with POST request method and request body
+        * hint: @RequestMapping POST, @RequestBody
+    + mapping URI `host/hello/{message}`
         + hint: @RequestMapping PUT, @PathVariable
 
 ---
@@ -403,7 +415,7 @@ public String hello(@PathVariable String message) {
     </dependency>
 ```
 
-- In test-driven development, we write broken test first. Then we do the coding that pass the test.
+- In test-driven development, starting with a broken test case then doing the coding that pass the test.
 - Every class for testing purposes is in test folder.
 - Run the test: `mvn test`.
 - For this training, please use JUnit 4.12.
@@ -464,11 +476,14 @@ public void getMessage() throws Exception {
 
 ---
 
-### Hands-on Writing Test in Spring
+### Hands-on Labs
 
-TODO violate the RED-GREEN cycle need revising
-
-- Write the test for three controllers that we already wrote.
+- Use TDD, please create controllers that:
+    + mapping URI `'host/employees?gender=male'`
+        * give response with all existing employees whose gender is male
+    + mapping URI `'host/employees'`, with request method POST and request body
+        * give response with created employee
+- All employees are stored into java collection (List, etc).
 
 ---
 
@@ -496,7 +511,7 @@ public class WebAppTest{
 
 ---
 
-### Testing with Web Context (Contd.)
+### Testing with Web Context (contd.)
 
 - To inject web context into test method, use @WebAppConfiguration and @ContextConfiguration.
 - When building mockMvc, use `.webappContextSetup(...)` instead `.standaloneSetup(...)`.
@@ -593,7 +608,7 @@ HttpMessageNotWritableException | 500 | Internal Server Error
 ### Business Exception
 
 - Controller can throw business exception and associate it with HTTP status code.
-- `@ResponseStatus` associates exception with HTTP status code
+- `@ResponseStatus` associates exception with HTTP status code.
 - Business exception must extend `RuntimeException`.
 
 ```java
@@ -606,7 +621,7 @@ public class NoWarException extends RuntimeException {}
 
 ---
 
-### Business Exception (Contd.)
+### Business Exception (contd.)
 
 ```java
 public String hello(String message) {
@@ -622,9 +637,30 @@ public String hello(String message) {
 
 ---
 
-### Testing Exception
+### Testing Business Exception
 
-TODO
+- Given incorrect input, make expectation on HTTP status code.
+    - Don't need to expect any exception thrown, because exception already associated with HTTP status code.
+- Use `is4xxClientError()` or `isBadRequest()` for ResultMatcher.
+
+```java
+@Test
+public void shouldReturnBadRequestGivenWar() {
+
+    this.mockMvc.perform(get("hello?message=make%20war"))
+        .andExpect(status().isOk())
+        .andExpect(status().isBadRequest());
+}
+```
+
+---
+
+### Hands-on Lab
+
+- Please write a controller that accept PUT request on `host/employees/{id}`.
+    + given employee exists, it replaces the existing with request body.
+    + given not exist, it give 404 response.
+- Please use TDD approach.
 
 ---
 
@@ -634,3 +670,6 @@ TODO
 - http://www.tutorialspoint.com/spring/spring_hello_world_example.htm
 - http://docs.spring.io/spring/docs/current/javadoc-api/
 - http://docs.spring.io/spring/docs/current/spring-framework-reference/
+- http://junit.org/junit4/
+- https://www.mitrais.com/en/spring-boot-not-new-spring
+- MLS Java EE, Spring Introduction
