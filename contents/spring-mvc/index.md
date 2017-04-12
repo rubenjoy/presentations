@@ -8,8 +8,9 @@
     + using Spring Boot
     + Spring Annotation not xml config
     + @Controller, @RequestMapping, @RequestParam, @RequestBody
-    + Simple unit testing
-- Spring Data Short Introduction: Entity & Repository
+- Able to write Unit Test for Spring application
+    + standalone setup without injecting web context
+- Able to write simple JSP view
 
 ---
 
@@ -79,7 +80,6 @@ Spring enables you to build applications from "plain old Java objects" (POJOs) a
 
 ### Spring Dependencies in Maven
 
-pom.xml
 ```xml
 <dependencies>
     <dependency>
@@ -152,8 +152,6 @@ dependencies {
 - alternative link: http://start.spring.io/sts
 - Spring Tool Suite is downloadable program please visit
     + http://spring.io/tools/sts
-
-
 
 ---
 
@@ -406,6 +404,7 @@ public String hello(@PathVariable String message) {
 ```
 
 - In test-driven development, we write broken test first. Then we do the coding that pass the test.
+- Every class for testing purposes is in test folder.
 - Run the test: `mvn test`.
 - For this training, please use JUnit 4.12.
 
@@ -413,24 +412,106 @@ public String hello(@PathVariable String message) {
 
 ### Unit Testing (contd.)
 
-- This example for JUnit testing.
+- Example for JUnit testing.
 
 ```java
 public class AppTest {
 
     @Test
     public void itShouldRun() {
-        // ... test than run matcher
-        assertTrue(true);
+        // ... test then run matcher or make expectation
+        bool variable = getValue();
+        assertTrue(variable);
     }
 }
 ```
 
 ---
 
-## Exception Handler
+### Testing Controller in Spring
 
-TODO 
+- Use MockMvc to mock our controller.
+
+```java
+@Test
+public class WebAppTest {
+
+    private MockMvc mockMvc;
+
+    @Before
+    public void setup() {
+        this.mockMvc = MockMvcBuilders
+            .standaloneSetup(new HelloController())
+            .build();
+    }
+}
+```
+
+---
+
+### Testing Controller in Spring (contd.)
+
+```java
+@Test
+public void getMessage() throws Exception {
+    this.mockMvc.perform(get("/hello"))
+        .andExpect(status().isOk());
+}
+```
+
+- `.perform(...)` mock request to dispatcher servlet, and `get(...)` mock http GET request method.
+- `.andExpect(...)` make expectation.
+
+---
+
+### Hands-on Writing Test in Spring
+
+TODO violate the RED-GREEN cycle need revising
+
+- Write the test for three controllers that we already wrote.
+
+---
+
+### Testing with Web Context
+
+```java
+@RunWith(SpringRunner.class)
+@WebConfiguration
+@ContextConfiguration("servlet-context.xml")
+public class WebAppTest{
+
+    @Autowired
+    private WebApplicationContext wac;
+
+    private MockMvc mockMvc;
+
+    @Before
+    public void setup() {
+        this.mockMvc = MockMvcBuilders
+            .webAppContextSetup(this.wac)
+            .build();
+    }
+}
+```
+
+---
+
+### Testing with Web Context
+
+- To inject web context into test method, use @WebAppConfiguration and @ContextConfiguration.
+- When building mockMvc, use `.webappContextSetup(...)` instead `.standaloneSetup(...)`.
+
+---
+
+## Handling Exception
+
+TODO  @ResponseStatus
+
+---
+
+### Testing Exception
+
+TODO
 
 ---
 
