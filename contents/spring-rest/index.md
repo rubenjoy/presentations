@@ -443,7 +443,7 @@ Example:
 @RestController
 public class EmployeeController {
     
-    @RequestMapping(value = "employees/{empId/score", method = RequestMethod.GET)
+    @RequestMapping(value = "employees/{empId}/score", method = RequestMethod.GET)
     AbstractMap.SimpleEntry<String, Double> getEmployeeByFilter(@PathVariable long empId) {
         Employee employee = verifyEmployee(empId);
         double result = employeeService.calcualateScore(employee);
