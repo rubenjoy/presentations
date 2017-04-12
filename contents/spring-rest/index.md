@@ -429,4 +429,11 @@ GET http://localhost:8080/employees/search will return
    }
  }
 ```
+
+---
+
+## References
+
+- https://www.tutorialspoint.com/restful/restful_web_services_tutorial.pdf
+- http://docs.spring.io/spring-data/rest/docs/current/reference/html/
  
