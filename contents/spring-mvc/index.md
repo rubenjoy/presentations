@@ -496,33 +496,135 @@ public class WebAppTest{
 
 ---
 
-### Testing with Web Context
+### Testing with Web Context (Contd.)
 
 - To inject web context into test method, use @WebAppConfiguration and @ContextConfiguration.
 - When building mockMvc, use `.webappContextSetup(...)` instead `.standaloneSetup(...)`.
 
 ---
 
+## JSP
+
+- Spring provides JSP support by default, with small configuration.
+- Add configuration in `src/main/resources/application.properties`.
+
+```
+spring.mvc.view.prefix: /WEB-INF/jsp/
+spring.mvc.view.suffix: .jsp
+```
+
+- The JSP templates are located on `/WEB-INF/jsp/` and each file has `.jsp` as suffix.
+
+---
+
+### Setup for JSP
+
+- Add dependencies and we're good to go.
+
+```xml
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-tomcat</artifactId>
+      <version>1.5.2.RELEASE</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.tomcat.embed</groupId>
+      <artifactId>tomcat-embed-jasper</artifactId>
+      <version>8.5.6</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>jstl</artifactId>
+      <version>1.2</version>
+    </dependency>
+```
+
+---
+
+### Create Hello JSP
+
+```html
+<%@ page contentType="text/html; charset=UTF-8" %>
+<html>
+    <head>
+        <title>Hello Spring JSP</title>
+    </head>
+    <body>
+        <h2>${message}</h2>
+    </body>
+</html>
+```
+
+- Write the snippet code above to `webapp/WEB-INF/jsp/hello.jsp`.
+- Attribute of `${message}` is taken from `ModelMap`.
+
+---
+
+### Controller Return View and ModelMap
+
+```java
+public String hello(ModelMap modelMap) {
+
+    modelMap.addAttribute("message", "Hello Spring from JSP");
+    return "hello";
+}
+```
+
+- Later on, spring will resolve the returned `"hello"` to `hello.jsp`.
+- Re-run Spring application, and open our hello page.
+
+---
+
 ## Handling Exception
 
-TODO  @ResponseStatus
+- Spring handles all unexpected exceptions that occur during controller execution.
+- The exception is associated with HTTP status code.
+
+Exception | Status Code | Status Text
+--- | ---: | :---
+NoHandlerFoundExcepetion | 404 | Not Found
+HttpMessageNotReadableException | 400 | Bad Request
+HttpMessageNotWritableException | 500 | Internal Server Error
+
+---
+
+### Business Exception
+
+- Controller can throw business exception and associate it with HTTP status code.
+- `@ResponseStatus` associates exception with HTTP status code
+- Business exception must extend `RuntimeException`.
+
+```java
+@ResponseStatus(
+    value = HttpStatus.BAD_REQUEST,
+    reason = "make peace no war"
+)
+public class NoWarException extends RuntimeException {}
+```
+
+---
+
+### Business Exception (Contd.)
+
+```java
+public String hello(String message) {
+
+    if (message.toLowerCase().indexOf("war") != -1)
+        throw new NoWarException();
+    // ...
+    return "Your message: " + message;
+}
+```
+
+- Validate it after visiting the hello page, with message containing "war".
 
 ---
 
 ### Testing Exception
 
 TODO
-
----
-
-## JSP
-
-TODO Form handling
-TODO exception handling
-
----
-
-## Short Intro to Persistence API
 
 ---
 
