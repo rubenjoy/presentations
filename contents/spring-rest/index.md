@@ -2,9 +2,8 @@
 
 - Introduced to REST and RESTful Web services
 - Introduced to Spring Data REST Repository
-- Hands on simple project with Spring Data REST Repository
 - Introduced to Spring Data REST Controller
-- Hands on simple project with Spring Data REST Controller
+- Hands on simple project with Spring Data REST Repository and Controller
 
 
 ## Agenda
@@ -102,7 +101,7 @@ adding duplicate entry
 ## RESTful Web Service with Spring Data REST
 
 - Resource: Domain objects or model
-- Message construction: Spring REST Repository and/or Spring REST Controller
+- Message construction: Spring REST Repository and/or Controller
 
 ---
 
@@ -459,8 +458,8 @@ public class EmployeeController {
     @RequestMapping(value = "employees/{empId}/score", method = RequestMethod.GET)
     AbstractMap.SimpleEntry<String, Double> getEmployeeByFilter(@PathVariable long empId) {
         Employee employee = verifyEmployee(empId);
-        double result = employeeService.calcualateScore(employee);
-        return new AbstractMap.SimpleEntry<String, Double>("score", result);
+        double result = employeeService.calculateScore(employee);
+        return new AbstractMap.SimpleEntry<String, Integer>("score", result);
     }
 }
 ```
@@ -473,10 +472,37 @@ public class EmployeeController {
 
 ---
 
-## Exercise
+## Hands on coding
 
-TODO
-
+- Please implement Employee entity with field:
+  - auto generated employee id
+  - firstName
+  - lastName
+  - gender
+  - date of birth
+- Please implement Employee paging and sorting repository and try following URI and check the results 
+  - GET http://localhost:8080/
+  - GET http://localhost:8080/employees
+  - POST http://localhost:8080/employees with JSON request body
+```json
+  {
+    "firstName": "Cal",
+    "lastName": "Supreme",
+    "gender": "Male",
+    "dob": "1989-03-09"
+  }
+```
+  - GET http://localhost:8080/employees/1 (or other employee id)
+  - PATCH http://localhost:8080/employees/1 (or other employee id) with JSON request body
+```json
+  {
+    "firstName": "California"
+  }
+```
+- Please implement REST Controller for Employee for GET /employees/{empId}/score that return employee score (you can implement calculate score which just generate random number)
+  - Try following URI and check the results. You can use client like Postman
+    - GET http://localhost:8080/employees/1/score
+ 
 ---
 
 ## References
