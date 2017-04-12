@@ -4,9 +4,11 @@
 - Able to mention more than one Spring Modules
 - Able to create Hello World Webapp in Spring
 - Know what MVC pattern is
-- Know how to implement Web Controller in Spring
+- Able to implement Web Controller in Spring
     + using Spring Boot
     + Spring Annotation not xml config
+    + @Controller, @RequestMapping, @RequestParam, @RequestBody
+    + Simple unit testing
 - Spring Data Short Introduction: Entity & Repository
 
 ---
@@ -17,6 +19,7 @@
 - Apache Maven 3.x
 - spring-boot-starter-web 1.5.2.RELEASE
 - spring-boot-starter-test 1.5.2 RELEASE
+- junit 4.12
 - spring-boot-starter-tomcat 1.5.2.RELEASE
 - tomcat-embed-jasper 8.5.6
 - jstl 1.2
@@ -291,15 +294,15 @@ Re-run our Spring Application, and open http://localhost:8080/hello
 
 ### Request Workflow (contd)
 
-1. Front Controller/ Dispatcher Servlet receive HTTP request.
-2. Dispatcher consult handler mapping to call appropriate controller.
-3. Dispatcher call the controller, then controller return the model.
-4. Dispatch resolve appropriate view to render response.
-5. Finally dispatch render the view on the browser.
+- Front Controller/ Dispatcher Servlet receive HTTP request.
+- Dispatcher consult handler mapping to call appropriate controller.
+- Dispatcher call the controller, then controller return the model.
+- Dispatch resolve appropriate view to render response.
+- Finally dispatch render the view on the browser.
 
 ---
 
-### Controller in Spring 
+## Controller in Spring
 
 - Put `@Controller` or `@RestController` on a class
     + Those annotations flag the following class is controller component, that automatically injected into the container.
@@ -337,8 +340,6 @@ Re-run our Spring Application, and open http://localhost:8080/hello
     + defaultvalue: when value missing, this value is injected.
 
 ```java
-@RequestMapping(value = "/hello")
-@ResponseBody
 public String hello(
         @RequestParam(value = "message", defaultValue = "Hello Spring")
         String message
@@ -352,11 +353,11 @@ public String hello(
 ### Request Body
 
 - Other than `@RequestParam`, request body is injectable too with `@RequestBody`
+
 ```java
-@RequestMapping(value = "/employees", method = RequestMethod.POST)
-public Employee save(@RequestBody Employee employee) {
-    // ...
-    return employee;
+public String hello(@RequestBody String message) {
+
+    return "Your message: " + message;
 }
 ```
 
@@ -365,31 +366,75 @@ public Employee save(@RequestBody Employee employee) {
 ### URI Path Pattern
 
 - Spring can inject from URI path variable also.
+
 ```java
-@RequestMapping(value = "/employees/{id}", method = RequestMethod.GET)
-public Employee findById(@PathVariable Integer id) {
+@RequestMapping(value = "/{message}")
+public String hello(@PathVariable String message) {
     // ...
-    return employee; 
+    return "Your message: " + message;
 }
 ```
+
 - Regular expression on URI path is possible.
 - Please consult Spring docs to know more, e.g.: `@RequestHeader`, `@RequestPart`
 
 ---
 
-### Unit Testing 
+### Hands on coding
 
-TODO
+- Please create 3 controllers that:
+    + mapping URI `'host/employees?gender=male'`
+        + hint: @RequestMapping GET, @RequestParam
+    + mapping URI `'host/employeees'`, with request method POST and request body
+        + hint: @RequestMapping POST, @RequestBody
+    + mapping URI `'host/employees/{id}'`, with request method PUT and request body
+        + hint: @RequestMapping PUT, @PathVariable
 
 ---
 
-### Exception Handler 
+## Unit Testing
+
+- By default, maven put JUnit as dependency.
+
+```xml
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+```
+
+- In test-driven development, we write broken test first. Then we do the coding that pass the test.
+- Run the test: `mvn test`.
+- For this training, please use JUnit 4.12.
+
+---
+
+### Unit Testing (contd.)
+
+- This example for JUnit testing.
+
+```java
+public class AppTest {
+
+    @Test
+    public void itShouldRun() {
+        // ... test than run matcher
+        assertTrue(true);
+    }
+}
+```
+
+---
+
+## Exception Handler
 
 TODO 
 
 ---
 
-### JSP 
+## JSP
 
 TODO Form handling
 TODO exception handling
