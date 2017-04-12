@@ -1,3 +1,12 @@
+## Training outcome
+
+- Introduced to REST and RESTful Web services
+- Introduced to Spring Data REST Repository
+- Hands on simple project with Spring Data REST Repository
+- Introduced to Spring Data REST Controller
+- Hands on simple project with Spring Data REST Controller
+
+
 ## Agenda
 
 - REST
@@ -249,7 +258,10 @@ GET http://localhost:8080/employees will return
           },
           "employee": {
             "href": "http://localhost:8080/employees/502"
-          }
+          },
+           "officeLocations": {
+             "href": "http://localhost:8080/employees/502/officeLocations"
+           }
         }
       },
       ...
@@ -291,7 +303,18 @@ GET http://localhost:8080/employees/502 will return
   "firstName": "Cal",
   "lastName": "Supreme",
   "gender": "Male",
-  "dob": "1989-03-09"
+  "dob": "1989-03-09",
+  "_links": {
+      "self": {
+        "href": "http://localhost:8080/employees/502"
+      },
+      "employee": {
+        "href": "http://localhost:8080/employees/502"
+      },
+      "officeLocations": {
+        "href": "http://localhost:8080/employees/502/officeLocations"
+      }
+    }
   }
 ```
 
@@ -305,7 +328,38 @@ GET http://localhost:8080/employees/502 will return
   - PUT - Binds the resource pointed to by the given URI(s) to the resource
   - POST - Only supported for collection associations. Adds a new element to the collection
   - DELETE - Unbinds the association
-- Example: TODO
+- Example:
+GET http://localhost:8080/employees/502/officeLocations will return
+```json
+{
+  "_embedded": {
+    "officeLocations": [
+      {
+        "locId": "l_502_1",
+        "startDate": "2017-04-12",
+        "endDate": null,
+        "officeLocation": "Bandung",
+        "_links": {
+          "self": {
+            "href": "http://localhost:8080/officeLocations/l_502_1"
+          },
+          "officeLocation": {
+            "href": "http://localhost:8080/officeLocations/l_502_1"
+          },
+          "employee": {
+            "href": "http://localhost:8080/officeLocations/l_502_1/employee"
+          }
+        }
+      }
+    ]
+  },
+  "_links": {
+    "self": {
+      "href": "http://localhost:8080/employees/502/officeLocations"
+    }
+  }
+}
+```
 
 ---
 
