@@ -11,7 +11,7 @@
 
 - REST
 - RESTful Web Service
-- RESTful Web Service with Spring
+- RESTful Web Service with Spring Data REST
 
 ---
 
@@ -102,7 +102,7 @@ adding duplicate entry
 ## RESTful Web Service with Spring Data REST
 
 - Resource: Domain objects or model
-- Message construction: Repository and/or Controller (and Service)
+- Message construction: Spring REST Repository and/or Spring REST Controller
 
 ---
 
@@ -179,10 +179,10 @@ Which will be returned as JSON Object in Response body:
 
 ---
 
-## Repository
+## Spring REST Repository
 
-- A mechanism for encapsulating storage, retrieval, and search behavior which emulates a collection of objects
-- Repository Type
+- Repository: A mechanism for encapsulating storage, retrieval, and search behavior which emulates a collection of objects
+- Spring REST Repository Type
   - CRUD Repository
   - PagingAndSortingRepository
     - CRUD Repository + paging and sorting capability   
@@ -191,7 +191,7 @@ Which will be returned as JSON Object in Response body:
 
 ---
 
-## Repository resources
+## Spring REST Repository resources
 
 - Fundamentals  
 - The collection resource
@@ -432,8 +432,41 @@ GET http://localhost:8080/employees/search will return
 
 ---
 
+## Spring REST Controller
+
+- If you need custom behavior that is not supported by Spring REST Repository
+- If you need a different response body with the domain object
+
+Example:
+
+```java
+@RestController
+public class EmployeeController {
+    
+    @RequestMapping(value = "employees/{empId/score", method = RequestMethod.GET)
+    AbstractMap.SimpleEntry<String, Double> getEmployeeByFilter(@PathVariable long empId) {
+        Employee employee = verifyEmployee(empId);
+        double result = employeeService.calcualateScore(employee);
+        return new AbstractMap.SimpleEntry<String, Double>("score", result);
+    }
+}
+```
+
+- @RestController - annotate a class as REST Controller
+- @RequestMapping - define path/URI and HTTP method if needed
+- @PathVariable - URI Template Patterns
+- @RequestParam - define GET parameter
+- @RequestBody - define request body
+
+---
+
+## Exercise
+
+---
+
 ## References
 
 - https://www.tutorialspoint.com/restful/restful_web_services_tutorial.pdf
 - http://docs.spring.io/spring-data/rest/docs/current/reference/html/
+- http://docs.spring.io/spring-framework/docs/current/spring-framework-reference/html/mvc.html
  
