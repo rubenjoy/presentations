@@ -4,10 +4,13 @@
 - Able to mention more than one Spring Modules
 - Able to create Hello World Webapp in Spring
 - Know what MVC pattern is
-- Know how to implement Web Controller in Spring
+- Able to implement Web Controller in Spring
     + using Spring Boot
     + Spring Annotation not xml config
-- Spring Data Short Introduction: Entity & Repository
+    + @Controller, @RequestMapping, @RequestParam, @RequestBody
+- Able to write Unit Test for Spring application
+    + standalone setup without injecting web context
+- Able to write simple JSP view
 
 ---
 
@@ -17,6 +20,7 @@
 - Apache Maven 3.x
 - spring-boot-starter-web 1.5.2.RELEASE
 - spring-boot-starter-test 1.5.2 RELEASE
+- junit 4.12
 - spring-boot-starter-tomcat 1.5.2.RELEASE
 - tomcat-embed-jasper 8.5.6
 - jstl 1.2
@@ -76,7 +80,6 @@ Spring enables you to build applications from "plain old Java objects" (POJOs) a
 
 ### Spring Dependencies in Maven
 
-pom.xml
 ```xml
 <dependencies>
     <dependency>
@@ -149,8 +152,6 @@ dependencies {
 - alternative link: http://start.spring.io/sts
 - Spring Tool Suite is downloadable program please visit
     + http://spring.io/tools/sts
-
-
 
 ---
 
@@ -291,15 +292,15 @@ Re-run our Spring Application, and open http://localhost:8080/hello
 
 ### Request Workflow (contd)
 
-1. Front Controller/ Dispatcher Servlet receive HTTP request.
-2. Dispatcher consult handler mapping to call appropriate controller.
-3. Dispatcher call the controller, then controller return the model.
-4. Dispatch resolve appropriate view to render response.
-5. Finally dispatch render the view on the browser.
+- Front Controller/ Dispatcher Servlet receive HTTP request.
+- Dispatcher consult handler mapping to call appropriate controller.
+- Dispatcher call the controller, then controller return the model.
+- Dispatch resolve appropriate view to render response.
+- Finally dispatch render the view on the browser.
 
 ---
 
-### Controller in Spring 
+## Controller in Spring
 
 - Put `@Controller` or `@RestController` on a class
     + Those annotations flag the following class is controller component, that automatically injected into the container.
@@ -337,8 +338,6 @@ Re-run our Spring Application, and open http://localhost:8080/hello
     + defaultvalue: when value missing, this value is injected.
 
 ```java
-@RequestMapping(value = "/hello")
-@ResponseBody
 public String hello(
         @RequestParam(value = "message", defaultValue = "Hello Spring")
         String message
@@ -352,11 +351,11 @@ public String hello(
 ### Request Body
 
 - Other than `@RequestParam`, request body is injectable too with `@RequestBody`
+
 ```java
-@RequestMapping(value = "/employees", method = RequestMethod.POST)
-public Employee save(@RequestBody Employee employee) {
-    // ...
-    return employee;
+public String hello(@RequestBody String message) {
+
+    return "Your message: " + message;
 }
 ```
 
@@ -365,38 +364,267 @@ public Employee save(@RequestBody Employee employee) {
 ### URI Path Pattern
 
 - Spring can inject from URI path variable also.
+
 ```java
-@RequestMapping(value = "/employees/{id}", method = RequestMethod.GET)
-public Employee findById(@PathVariable Integer id) {
+@RequestMapping(value = "/{message}")
+public String hello(@PathVariable String message) {
     // ...
-    return employee; 
+    return "Your message: " + message;
 }
 ```
+
 - Regular expression on URI path is possible.
 - Please consult Spring docs to know more, e.g.: `@RequestHeader`, `@RequestPart`
 
 ---
 
-### Unit Testing 
+### Hands on coding
+
+- Please create 3 controllers that:
+    + mapping URI `'host/employees?gender=male'`
+        + hint: @RequestMapping GET, @RequestParam
+    + mapping URI `'host/employeees'`, with request method POST and request body
+        + hint: @RequestMapping POST, @RequestBody
+    + mapping URI `'host/employees/{id}'`, with request method PUT and request body
+        + hint: @RequestMapping PUT, @PathVariable
+
+---
+
+## Unit Testing
+
+- By default, maven put JUnit as dependency.
+
+```xml
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+```
+
+- In test-driven development, we write broken test first. Then we do the coding that pass the test.
+- Every class for testing purposes is in test folder.
+- Run the test: `mvn test`.
+- For this training, please use JUnit 4.12.
+
+---
+
+### Unit Testing (contd.)
+
+- Example for JUnit testing.
+
+```java
+public class AppTest {
+
+    @Test
+    public void itShouldRun() {
+        // ... test then run matcher or make expectation
+        bool variable = getValue();
+        assertTrue(variable);
+    }
+}
+```
+
+---
+
+### Testing Controller in Spring
+
+- Use MockMvc to mock our controller.
+
+```java
+@Test
+public class WebAppTest {
+
+    private MockMvc mockMvc;
+
+    @Before
+    public void setup() {
+        this.mockMvc = MockMvcBuilders
+            .standaloneSetup(new HelloController())
+            .build();
+    }
+}
+```
+
+---
+
+### Testing Controller in Spring (contd.)
+
+```java
+@Test
+public void getMessage() throws Exception {
+    this.mockMvc.perform(get("/hello"))
+        .andExpect(status().isOk());
+}
+```
+
+- `.perform(...)` mock request to dispatcher servlet, and `get(...)` mock http GET request method.
+- `.andExpect(...)` make expectation.
+
+---
+
+### Hands-on Writing Test in Spring
+
+TODO violate the RED-GREEN cycle need revising
+
+- Write the test for three controllers that we already wrote.
+
+---
+
+### Testing with Web Context
+
+```java
+@RunWith(SpringRunner.class)
+@WebConfiguration
+@ContextConfiguration("servlet-context.xml")
+public class WebAppTest{
+
+    @Autowired
+    private WebApplicationContext wac;
+
+    private MockMvc mockMvc;
+
+    @Before
+    public void setup() {
+        this.mockMvc = MockMvcBuilders
+            .webAppContextSetup(this.wac)
+            .build();
+    }
+}
+```
+
+---
+
+### Testing with Web Context (Contd.)
+
+- To inject web context into test method, use @WebAppConfiguration and @ContextConfiguration.
+- When building mockMvc, use `.webappContextSetup(...)` instead `.standaloneSetup(...)`.
+
+---
+
+## JSP
+
+- Spring provides JSP support by default, with small configuration.
+- Add configuration in `src/main/resources/application.properties`.
+
+```
+spring.mvc.view.prefix: /WEB-INF/jsp/
+spring.mvc.view.suffix: .jsp
+```
+
+- The JSP templates are located on `/WEB-INF/jsp/` and each file has `.jsp` as suffix.
+
+---
+
+### Setup for JSP
+
+- Add dependencies and we're good to go.
+
+```xml
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-tomcat</artifactId>
+      <version>1.5.2.RELEASE</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.tomcat.embed</groupId>
+      <artifactId>tomcat-embed-jasper</artifactId>
+      <version>8.5.6</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>jstl</artifactId>
+      <version>1.2</version>
+    </dependency>
+```
+
+---
+
+### Create Hello JSP
+
+```html
+<%@ page contentType="text/html; charset=UTF-8" %>
+<html>
+    <head>
+        <title>Hello Spring JSP</title>
+    </head>
+    <body>
+        <h2>${message}</h2>
+    </body>
+</html>
+```
+
+- Write the snippet code above to `webapp/WEB-INF/jsp/hello.jsp`.
+- Attribute of `${message}` is taken from `ModelMap`.
+
+---
+
+### Controller Return View and ModelMap
+
+```java
+public String hello(ModelMap modelMap) {
+
+    modelMap.addAttribute("message", "Hello Spring from JSP");
+    return "hello";
+}
+```
+
+- Later on, spring will resolve the returned `"hello"` to `hello.jsp`.
+- Re-run Spring application, and open our hello page.
+
+---
+
+## Handling Exception
+
+- Spring handles all unexpected exceptions that occur during controller execution.
+- The exception is associated with HTTP status code.
+
+Exception | Status Code | Status Text
+--- | ---: | :---
+NoHandlerFoundExcepetion | 404 | Not Found
+HttpMessageNotReadableException | 400 | Bad Request
+HttpMessageNotWritableException | 500 | Internal Server Error
+
+---
+
+### Business Exception
+
+- Controller can throw business exception and associate it with HTTP status code.
+- `@ResponseStatus` associates exception with HTTP status code
+- Business exception must extend `RuntimeException`.
+
+```java
+@ResponseStatus(
+    value = HttpStatus.BAD_REQUEST,
+    reason = "make peace no war"
+)
+public class NoWarException extends RuntimeException {}
+```
+
+---
+
+### Business Exception (Contd.)
+
+```java
+public String hello(String message) {
+
+    if (message.toLowerCase().indexOf("war") != -1)
+        throw new NoWarException();
+    // ...
+    return "Your message: " + message;
+}
+```
+
+- Validate it after visiting the hello page, with message containing "war".
+
+---
+
+### Testing Exception
 
 TODO
-
----
-
-### Exception Handler 
-
-TODO 
-
----
-
-### JSP 
-
-TODO Form handling
-TODO exception handling
-
----
-
-## Short Intro to Persistence API
 
 ---
 
