@@ -114,8 +114,8 @@ Spring enables you to build applications from "plain old Java objects" (POJOs) a
 
 ### Compile and Running the Maven Project
 
-- Compile: `maven compile`
-- Run: `maven spring-boot:run`
+- Compile: `mvn compile`
+- Run: `mvn spring-boot:run`
     + call spring maven plugin and start Spring App / Spring Container
 
 ---
@@ -275,7 +275,7 @@ public class App {
 
 ```java
 @Controller
-public class HelloController() {
+public class HelloController {
 
     @RequestMapping("/hello")
     @ResponseBody
@@ -410,7 +410,7 @@ public String hello(@PathVariable String message) {
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>3.8.1</version>
+      <version>...</version>
       <scope>test</scope>
     </dependency>
 ```
@@ -493,7 +493,7 @@ public void getMessage() throws Exception {
 @RunWith(SpringRunner.class)
 @WebConfiguration
 @ContextConfiguration("servlet-context.xml")
-public class WebAppTest{
+public class WebAppTest {
 
     @Autowired
     private WebApplicationContext wac;
@@ -648,7 +648,6 @@ public String hello(String message) {
 public void shouldReturnBadRequestGivenWar() {
 
     this.mockMvc.perform(get("hello?message=make%20war"))
-        .andExpect(status().isOk())
         .andExpect(status().isBadRequest());
 }
 ```
